@@ -1,10 +1,10 @@
 <template>
   <section class="content">
     <div class="row">
-      <div class="col-md-6"><de-xuat-mua-hang /></div>
+      <div class="col-md-6"><de-xuat-mua-hang :muahang="muahang" /></div>
       <div class="col-md-6">
-        <them-mat-hang />
-        <nhung-mat-hang-can-mua />
+        <them-mat-hang :muahangct="muahangct" />
+        <nhung-mat-hang-can-mua :muahangcts="muahang.MuaHangCTs" />
       </div>
     </div>
     <div class="row">
@@ -21,8 +21,18 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "MuaHang",
+  computed: {
+    // mix the getters into computed with object spread operator
+    ...mapGetters("muahangs", [
+      "muahangs",
+      "muahang",
+      "muahangct"
+      // ...
+    ])
+  },
   components: {
     "de-xuat-mua-hang": require("../components/MuaHang/Card/DeXuatMuaHang.vue")
       .default,

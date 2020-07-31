@@ -26,10 +26,20 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "MuaHang",
   components: {
     "mua-hang-todo": require("../components/MuaHang/MuaHangTodo.vue").default
+  },
+  computed: {
+    // mix the getters into computed with object spread operator
+    ...mapGetters('muahangs',[
+      'muahangs',
+      'muahang',
+      'muahangct',
+      // ...
+    ])
   }
 };
 </script>

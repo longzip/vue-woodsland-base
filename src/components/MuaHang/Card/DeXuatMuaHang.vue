@@ -17,19 +17,25 @@
     <div class="card-body">
       <div class="form-group">
         <label for="inputName">Số phiếu</label>
-        <input type="text" id="inputName" class="form-control" />
+        <input
+          type="text"
+          id="inputName"
+          v-model="muahang.soPhieu"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="inputDescription">Nội dung</label>
         <textarea
           id="inputDescription"
           class="form-control"
+          v-model="muahang.noiDung"
           rows="4"
         ></textarea>
       </div>
       <div class="form-group">
         <label for="inputStatus">Trạng thái</label>
-        <select class="form-control custom-select">
+        <select v-model="muahang.trangThai" class="form-control custom-select">
           <option selected="" disabled="">Chọn một</option>
           <option>Tạm dừng</option>
           <option>Hủy</option>
@@ -51,7 +57,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    muahang: {}
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

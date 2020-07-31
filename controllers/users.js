@@ -7,11 +7,15 @@ const stage = 10;
 function validateUser(user) {
   const schema = {
     name: Joi.string(),
-    username: Joi.string().alphanum().min(3).max(30).required(),
+    username: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
     password: Joi.string()
       .regex(/^[a-zA-Z0-9]{3,30}$/)
       .required(),
-    email: Joi.string().email({ minDomainSegments: 2 }),
+    email: Joi.string().email({ minDomainSegments: 2 })
   };
   return Joi.validate(user, schema);
 }
@@ -22,12 +26,12 @@ module.exports = {
     let status = 200;
 
     User.findByPk(req.params.id)
-      .then((item) => {
+      .then(item => {
         result.status = status;
         result.result = item.destroy();
         return res.status(status).send(result);
       })
-      .catch((err) => {
+      .catch(err => {
         status = 500;
         result.status = status;
         result.error = err;
@@ -48,7 +52,7 @@ module.exports = {
       return res.status(status).send(result);
     }
 
-    bcrypt.hash(value.password, stage.saltingRounds, function (err, hash) {
+    bcrypt.hash(value.password, stage.saltingRounds, function(err, hash) {
       if (err) {
         status = 500;
         result.status = status;
@@ -57,12 +61,12 @@ module.exports = {
       } else {
         value.password = hash;
         User.create(value)
-          .then((user) => {
+          .then(user => {
             result.status = status;
             result.result = user;
             return res.status(status).send(result);
           })
-          .catch((err) => {
+          .catch(err => {
             status = 500;
             result.status = status;
             result.error = err;
@@ -77,12 +81,12 @@ module.exports = {
     let status = 200;
 
     User.findByPk(req.params.id)
-      .then((uom) => {
+      .then(uom => {
         result.status = status;
         result.result = uom;
         return res.status(status).send(result);
       })
-      .catch((err) => {
+      .catch(err => {
         status = 500;
         result.status = status;
         result.error = err;
@@ -95,8 +99,14 @@ module.exports = {
     let status = 201;
 
     let { error, value } = validateUser(req.body);
+    if (error) {
+      status = 500;
+      result.status = status;
+      result.error = error;
+      return res.status(status).send(result);
+    }
     if (value.password) {
-      bcrypt.hash(value.password, stage.saltingRounds, function (err, hash) {
+      bcrypt.hash(value.password, stage.saltingRounds, function(err, hash) {
         if (err) {
           status = 500;
           result.status = status;
@@ -106,15 +116,15 @@ module.exports = {
           value.password = hash;
           User.update(value, {
             where: {
-              id: req.params.id,
-            },
+              id: req.params.id
+            }
           })
-            .then((affectedRows) => {
+            .then(affectedRows => {
               result.status = status;
               result.result = affectedRows;
               return res.status(status).send(result);
             })
-            .catch((err) => {
+            .catch(err => {
               status = 500;
               result.status = status;
               result.error = err;
@@ -125,15 +135,15 @@ module.exports = {
     } else {
       User.update(value, {
         where: {
-          id: req.params.id,
-        },
+          id: req.params.id
+        }
       })
-        .then((affectedRows) => {
+        .then(affectedRows => {
           result.status = status;
           result.result = affectedRows;
           return res.status(status).send(result);
         })
-        .catch((err) => {
+        .catch(err => {
           status = 500;
           result.status = status;
           result.error = err;
@@ -152,12 +162,12 @@ module.exports = {
     // return res.status(status).send(result);
 
     User.findAll()
-      .then((users) => {
+      .then(users => {
         result.status = status;
         result.result = users;
         return res.status(status).send(result);
       })
-      .catch((err) => {
+      .catch(err => {
         status = 500;
         result.status = status;
         result.error = err;
@@ -171,11 +181,11 @@ module.exports = {
     const { username, password } = req.body;
 
     User.findOne({ raw: true, where: { username } })
-      .then((user) => {
+      .then(user => {
         // We could compare passwords in our model instead of below as well
         bcrypt
           .compare(password, user.password)
-          .then((match) => {
+          .then(match => {
             if (match) {
               status = 200;
               // Create a token
@@ -183,7 +193,7 @@ module.exports = {
               const payload = { user: user.name };
               const options = {
                 expiresIn: "2d",
-                issuer: "https://woodsland.com.vn",
+                issuer: "https://woodsland.com.vn"
               };
               const secret = "sdkfjksdjkfjkjfsiojfksdjkfsd";
 
@@ -193,7 +203,7 @@ module.exports = {
               result.status = status;
               result.result = Object.assign(user, {
                 roles: ["admin"],
-                rights: ["can_view_users"],
+                rights: ["can_view_users"]
               });
               // result.result = {
               //   id: user.id,
@@ -211,18 +221,18 @@ module.exports = {
             }
             return res.status(status).send(result);
           })
-          .catch((err) => {
+          .catch(err => {
             status = 500;
             result.status = status;
             result.error = err;
             return res.status(status).send(result);
           });
       })
-      .catch((err) => {
+      .catch(err => {
         status = 500;
         result.status = status;
         result.error = err;
         res.status(status).send(result);
       });
-  },
+  }
 };

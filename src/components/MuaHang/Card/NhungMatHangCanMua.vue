@@ -26,9 +26,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Functional-requirements.docx</td>
-            <td>49.8005 kb</td>
+          <tr v-for="muahangct in muahangcts" :key="muahangct.id">
+            <td>{{ muahangct.tenMatHang }}</td>
+            <td>{{ muahangct.soLuong }}</td>
+            <td>{{ muahangct.donViTinh }}</td>
             <td class="text-right py-0 align-middle">
               <div class="btn-group btn-group-sm">
                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
@@ -47,7 +48,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    muahangcts: []
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

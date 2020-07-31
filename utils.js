@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
+// const multer = require("multer");
 
 module.exports = {
   validateToken: (req, res, next) => {
@@ -9,7 +9,7 @@ module.exports = {
       const token = req.headers.authorization.split(" ")[1]; // Bearer <token>
       const options = {
         expiresIn: "2d",
-        issuer: "https://app.woodsland.com.vn",
+        issuer: "https://app.woodsland.com.vn"
       };
       try {
         // verify makes sure that the token hasn't expired and has been issued by us
@@ -26,12 +26,12 @@ module.exports = {
     } else {
       result = {
         error: `Authentication error. Token required.`,
-        status: 401,
+        status: 401
       };
       res.status(401).send(result);
     }
   },
-  generateToken: (user) => {
+  generateToken: user => {
     return jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
@@ -39,18 +39,18 @@ module.exports = {
     );
   },
 
-  getAuthUser: (req) => {
-    const tokenWithBearer = req.headers.authorization || ''
-    const token = tokenWithBearer.split(' ')[1]
+  getAuthUser: req => {
+    const tokenWithBearer = req.headers.authorization || "";
+    const token = tokenWithBearer.split(" ")[1];
 
     if (!token) {
-      return null
+      return null;
     }
 
     try {
-      return jwt.verify(token, process.env.JWT_SECRET)
+      return jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
-      return null
+      return null;
     }
   }
 };

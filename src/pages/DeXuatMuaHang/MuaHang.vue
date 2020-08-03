@@ -9,7 +9,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0" style="height: 300px;">
-              <mua-hang-todo />>
+              <mua-hang-todo :muahangs="muahangs" />
             </div>
             <!-- /.card-body -->
             <div class="card-footer clearfix">
@@ -30,16 +30,10 @@ import { mapGetters } from "vuex";
 export default {
   name: "MuaHang",
   components: {
-    "mua-hang-todo": require("../components/MuaHang/MuaHangTodo.vue").default
+    "mua-hang-todo": require("../../components/MuaHang/MuaHangTodo.vue").default
   },
   computed: {
-    // mix the getters into computed with object spread operator
-    ...mapGetters('muahangs',[
-      'muahangs',
-      'muahang',
-      'muahangct',
-      // ...
-    ])
+    ...mapGetters("muahangs", ["muahangs"])
   }
 };
 </script>

@@ -26,16 +26,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="muahangct in muahangcts" :key="muahangct.id">
-            <td>{{ muahangct.tenMatHang }}</td>
-            <td>{{ muahangct.soLuong }}</td>
-            <td>{{ muahangct.donViTinh }}</td>
+          <tr v-for="mathang in mathangs" :key="mathang.id">
+            <td>{{ mathang.tenMatHang }}</td>
+            <td>{{ mathang.soLuong }}</td>
+            <td>{{ mathang.donViTinh }}</td>
             <td class="text-right py-0 align-middle">
               <div class="btn-group btn-group-sm">
                 <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                <a href="#" class="btn btn-danger"
-                  ><i class="fas fa-trash"></i
-                ></a>
+                <button @click="xoaMatHang(mathang.id)" class="btn btn-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
             </td>
           </tr>
@@ -48,9 +48,13 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
-    muahangcts: []
+    mathangs: null
+  },
+  methods: {
+    ...mapActions("muahangs", ["xoaMatHang"])
   }
 };
 </script>

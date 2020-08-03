@@ -21,7 +21,7 @@
         <input
           type="text"
           id="inputTenMatHang"
-          v-model="muahangct.tenMatHang"
+          v-model="mathang.tenMatHang"
           class="form-control"
         />
       </div>
@@ -30,7 +30,7 @@
         <input
           type="text"
           id="inputXuatXu"
-          v-model="muahangct.xuatXu"
+          v-model="mathang.xuatXu"
           class="form-control"
         />
       </div>
@@ -38,7 +38,7 @@
         <label for="inputDonViTinh">Đơn vị tính</label>
         <input
           type="text"
-          v-model="muahangct.donViTinh"
+          v-model="mathang.donViTinh"
           id="inputDonViTinh"
           class="form-control"
         />
@@ -47,20 +47,25 @@
         <label for="inputSoLuong">Số lượng</label>
         <input
           type="number"
-          v-model="muahangct.soLuong"
+          v-model="mathang.soLuong"
           id="inputSoLuong"
           class="form-control"
         />
       </div>
       <div class="form-group">
         <label for="inputYeuCauKyThuat">Yêu cầu kỹ thuật</label>
-        <input type="text" id="inputYeuCauKyThuat" class="form-control" />
+        <input
+          type="text"
+          v-model="mathang.yeuCauKyThuat"
+          id="inputYeuCauKyThuat"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="inputThoiGianCungCap">Thời gian cung cấp</label>
         <input
           type="date"
-          v-model="muahangct.thoiGianCungCap"
+          v-model="mathang.thoiGianCungCap"
           id="inputThoiGianCungCap"
           class="form-control"
         />
@@ -69,7 +74,7 @@
         <label for="inputLyDoYeuCau">Lý do yêu cầu</label>
         <textarea
           id="inputLyDoYeuCau"
-          v-model="muahangct.lyDoYeuCau"
+          v-model="mathang.lyDoYeuCau"
           class="form-control"
           rows="3"
         ></textarea>
@@ -77,20 +82,27 @@
     </div>
     <!-- /.card-body -->
     <div class="card-footer clearfix">
-      <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-left"
-        >Xóa</a
+      <button @click="taoMatHang()" class="btn btn-sm btn-secondary float-left">
+        Xóa
+      </button>
+      <button
+        @click="themMatHang(mathang)"
+        class="btn btn-sm btn-primary float-right"
       >
-      <a href="javascript:void(0)" class="btn btn-sm btn-primary float-right"
-        >Thêm mặt hàng</a
-      >
+        Thêm mặt hàng
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
-    muahangct: {}
+    mathang: {}
+  },
+  methods: {
+    ...mapActions("muahangs", ["themMatHang", "taoMatHang"])
   }
 };
 </script>

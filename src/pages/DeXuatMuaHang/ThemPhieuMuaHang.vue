@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-6"><de-xuat-mua-hang :muahang="muahang" /></div>
       <div class="col-md-6">
-        <them-mat-hang :muahangct="muahangct" />
-        <nhung-mat-hang-can-mua :muahangcts="muahang.MuaHangCTs" />
+        <them-mat-hang :mathang="matHang" />
+        <nhung-mat-hang-can-mua :mathangs="muahang.MuaHangCTs" />
       </div>
     </div>
     <div class="row">
@@ -29,16 +29,15 @@ export default {
     ...mapGetters("muahangs", [
       "muahangs",
       "muahang",
-      "muahangct"
+      "matHang"
       // ...
     ])
   },
   components: {
-    "de-xuat-mua-hang": require("../components/MuaHang/Card/DeXuatMuaHang.vue")
+    "de-xuat-mua-hang": require("../../components/MuaHang/Card/DeXuatMuaHang.vue")
       .default,
-    "them-mat-hang": require("../components/MuaHang/Card/ThemMatHang.vue")
-      .default,
-    "nhung-mat-hang-can-mua": require("../components/MuaHang/Card/NhungMatHangCanMua.vue")
+    "them-mat-hang": require("../../components/MuaHang/Card/ThemMatHang.vue").default,
+    "nhung-mat-hang-can-mua": require("../../components/MuaHang/Card/NhungMatHangCanMua.vue")
       .default
   }
 };

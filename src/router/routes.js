@@ -4,10 +4,17 @@ const routes = [
     component: () => import("../layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("../pages/Index.vue") },
-      { path: "mua-hang", component: () => import("../pages/MuaHang.vue") },
+      {
+        path: "mua-hang",
+        component: () => import("../pages/DeXuatMuaHang/MuaHang.vue")
+      },
       {
         path: "them-phieu-mua-hang",
-        component: () => import("../pages/ThemPhieuMuaHang.vue")
+        component: () => import("../pages/DeXuatMuaHang/ThemPhieuMuaHang.vue")
+      },
+      {
+        path: "in-phieu-mua-hang",
+        component: () => import("../pages/DeXuatMuaHang/InPhieuMuaHang.vue")
       }
     ]
   },

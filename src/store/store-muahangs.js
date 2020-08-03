@@ -29,7 +29,7 @@ let muahang = {
     .subtract(-2, "days")
     .format()
     .slice(0, 10)
-}
+};
 
 const state = {
   matHang,

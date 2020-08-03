@@ -15,6 +15,10 @@ const routes = [
       {
         path: "in-phieu-mua-hang",
         component: () => import("../pages/DeXuatMuaHang/InPhieuMuaHang.vue")
+      },
+      {
+        path: "quan-ly-nguoi-dung",
+        component: () => import("@/pages/Users/PageUsers.vue")
       }
     ]
   },

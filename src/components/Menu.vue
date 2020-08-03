@@ -9,21 +9,53 @@
     >
       <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-      <li class="nav-item">
-        <a href="/" class="nav-link">
+      <li class="nav-item menu-open">
+        <a href="/" class="nav-link active">
           <i class="nav-icon fas fa-tachometer-alt"></i>
           <p>
-            Dashboard
+            Phê duyệt
           </p>
         </a>
       </li>
-      <li class="nav-item menu-open">
-        <a href="/mua-hang" class="nav-link">
-          <i class="nav-icon fas fa-circle"></i>
+      <li class="nav-item has-treeview menu-open">
+        <a href="#" class="nav-link">
+          <i class="nav-icon fas fa-ticket-alt green"></i>
           <p>
             Mua hàng
+            <i class="right fas fa-angle-left"></i>
           </p>
         </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="/mua-hang" class="nav-link">
+              <i class="far fa-circle nav-icon green"></i>
+              <p>Đề xuất mua hàng</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./them-phieu-mua-hang" class="nav-link">
+              <i class="far fa-circle nav-icon green"></i>
+              <p>Tạo đề xuất mua hàng</p>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item has-treeview menu-open">
+        <a href="#" class="nav-link">
+          <i class="nav-icon fas fa-cogs cyan"></i>
+          <p>
+            Quản trị hệ thống
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="/quan-ly-nguoi-dung" class="nav-link">
+              <i class="fas fa-user-cog nav-icon cyan"></i>
+              <p>Nhân viên</p>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="nav-item">
         <a href="#" class="nav-link">

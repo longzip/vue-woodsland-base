@@ -47,8 +47,8 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper"><router-view /></div>
-
+    <!-- <div class="content-wrapper"></div> -->
+    <router-view />
     <!-- Main Footer -->
     <footer class="main-footer">
       <!-- To the right -->

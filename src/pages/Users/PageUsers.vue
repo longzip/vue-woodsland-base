@@ -3,10 +3,10 @@
     <section class="content">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Users</h3>
+          <h3 class="card-title">Danh sách nhân viên</h3>
           <div class="card-tools">
             <a href="#" @click="newModal" class="btn btn-primary">
-              Add User <i class="fa fa-user-plus"></i>
+              Thêm nhân viên <i class="fa fa-user-plus"></i>
             </a>
           </div>
         </div>
@@ -17,7 +17,7 @@
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
-      <add-user :editmode="editmode" />
+      <add-user :editmode="editmode" :user="user" />
     </section>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
       users: {},
       roles: [],
       // Create a new form instance
-      form: {
+      user: {
         id: "",
         name: "",
         username: "",

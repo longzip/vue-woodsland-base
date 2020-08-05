@@ -1,20 +1,24 @@
 const routes = [
   {
     path: "/",
-    component: () => import("../layouts/MainLayout.vue"),
+    component: () => import("@/layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("../pages/Index.vue") },
+      { path: "", component: () => import("@/pages/Index.vue") },
       {
         path: "mua-hang",
-        component: () => import("../pages/DeXuatMuaHang/MuaHang.vue")
+        component: () => import("@/pages/DeXuatMuaHang/MuaHang.vue")
       },
       {
         path: "them-phieu-mua-hang",
-        component: () => import("../pages/DeXuatMuaHang/ThemPhieuMuaHang.vue")
+        component: () => import("@/pages/DeXuatMuaHang/ThemPhieuMuaHang.vue")
       },
       {
         path: "in-phieu-mua-hang",
-        component: () => import("../pages/DeXuatMuaHang/InPhieuMuaHang.vue")
+        component: () => import("@/pages/DeXuatMuaHang/InPhieuMuaHang.vue")
+      },
+      {
+        path: "quan-ly-phong-ban",
+        component: () => import("@/pages/Costcenters/PageCostcenters.vue")
       },
       {
         path: "quan-ly-nguoi-dung",

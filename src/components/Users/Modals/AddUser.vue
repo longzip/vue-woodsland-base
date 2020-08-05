@@ -26,55 +26,60 @@
           </button>
         </div>
         <form @submit.prevent="editmode ? updateUser() : createUser()">
-          <!-- <div class="modal-body">
+          <div class="modal-body">
             <div class="form-group">
               <input
-                v-model="form.name"
+                v-model="user.name"
                 type="text"
                 name="name"
                 placeholder="Họ và tên"
                 class="form-control"
-                :class="{ 'is-invalid': form.errors.has('name') }"
               />
-              <has-error :form="form" field="name"></has-error>
             </div>
             <div class="form-group">
               <input
-                v-model="form.email"
+                v-model="user.email"
                 type="email"
                 name="email"
                 placeholder="Email"
                 class="form-control"
-                :class="{ 'is-invalid': form.errors.has('email') }"
               />
-              <has-error :form="form" field="email"></has-error>
             </div>
             <div class="form-group">
               <input
-                v-model="form.username"
+                v-model="user.username"
                 type="text"
                 name="username"
                 placeholder="Mã số nhân viên"
                 class="form-control"
-                :class="{ 'is-invalid': form.errors.has('username') }"
               />
-              <has-error :form="form" field="username"></has-error>
             </div>
             <div class="form-group">
+              <label>Phòng ban</label>
+              <select class="form-control">
+                <option selected="" disabled="">Chọn một</option>
+                <option>option 1</option>
+                <option>option 2</option>
+                <option>option 3</option>
+                <option>option 4</option>
+                <option>option 5</option>
+              </select>
+            </div>
+            <!-- <div class="form-group">
               <label>Vai trò</label>
               <multiselect
-                v-model="form.roles"
+                v-model="user.roles"
                 tag-placeholder="Thêm vai trò"
                 placeholder="Tìm hoặc chọn"
                 :options="roles"
                 :multiple="true"
                 :taggable="true"
               ></multiselect>
-            </div>
-            <div>
+            </div> -->
+            <!-- <div>
               <label>Thuộc Showroom</label>
               <multiselect
-                v-model="form.costcenters"
+                v-model="user.costcenters"
                 tag-placeholder=""
                 placeholder="Tìm showroom"
                 label="name"
@@ -83,19 +88,17 @@
                 :multiple="true"
                 :taggable="true"
               ></multiselect>
-            </div>
+            </div> -->
             <div class="form-group">
               <input
-                v-model="form.password"
+                v-model="user.password"
                 type="password"
                 name="password"
                 placeholder="Mật khẩu"
                 class="form-control"
-                :class="{ 'is-invalid': form.errors.has('password') }"
               />
-              <has-error :form="form" field="password"></has-error>
             </div>
-          </div> -->
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">
               Hủy
@@ -114,7 +117,7 @@
 </template>
 
 <script>
-export default { props: ["editmode"] };
+export default { props: ["editmode", "user"] };
 </script>
 
 <style lang="scss" scoped></style>

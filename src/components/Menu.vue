@@ -55,6 +55,12 @@
               <p>Nhân viên</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="/quan-ly-phong-ban" class="nav-link">
+              <i class="fas fa-building nav-icon cyan"></i>
+              <p>Phòng ban</p>
+            </a>
+          </li>
         </ul>
       </li>
       <li class="nav-item">

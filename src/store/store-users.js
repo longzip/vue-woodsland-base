@@ -8,49 +8,64 @@ let user = {
   email: "",
   password: "",
   roles: [],
-  costcenters: []
+  costcenter: ""
 };
 
 const state = {
   user,
-  users: {
-    user
-  }
+  users: [],
+  successStatus: true
 };
 
 const mutations = {
-  updateTask(state, payload) {
-    Object.assign(state.tasks[payload.id], payload.updates);
+  updateUser(state, payload) {
+    console.log("Update User");
+    console.log(payload);
   },
 
   deleteTask(state, id) {
     Vue.delete(state.tasks, id);
   },
 
-  addTask(state, payload) {
-    Vue.set(state.tasks, payload.id, payload.task);
+  addUser(state, payload) {
+    state.users.push({ ...payload, id: uuidv4() });
+  },
+
+  resetUser(state) {
+    state.user = {
+      ...user,
+      id: "",
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      roles: [],
+      costcenter: ""
+    };
+  },
+
+  setSuccessStatus(state, payload) {
+    state.successStatus = payload;
   }
 };
 
 const actions = {
-  updateTask({ commit }, payload) {
-    commit("updateTask", payload);
+  updateUser({ commit }, payload) {
+    commit("updateUser", payload);
   },
 
-  deleteTask({ commit }, id) {
-    commit("deleteTask", id);
+  deleteUser({ commit }, id) {
+    commit("deleteUser", id);
   },
 
-  addTask({ commit }, task) {
-    let taskId = uuidv4();
+  addUser({ commit }, user) {
+    console.log("Lưu user");
+    console.log(user);
+    commit("addUser", user);
+  },
 
-    let payload = {
-      id: taskId,
-
-      task: task
-    };
-
-    commit("addTask", payload);
+  resetUser({ commit }) {
+    commit("resetUser");
   }
 };
 
@@ -60,6 +75,9 @@ const getters = {
   },
   user: state => {
     return state.user;
+  },
+  successStatus: state => {
+    return state.successStatus;
   }
 };
 

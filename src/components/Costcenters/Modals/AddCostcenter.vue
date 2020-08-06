@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Default Modal</h4>
+          <h4 class="modal-title">Phòng ban</h4>
           <button
             type="button"
             class="close"
@@ -13,8 +13,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <form>
+        <form @submit.prevent="confirmSaveCostcenter">
+          <div class="modal-body">
             <div class="form-group">
               <label for="ma-phong" class="col-form-label">Mã phòng:</label>
               <input
@@ -33,20 +33,16 @@
                 id="ten-phong"
               />
             </div>
-          </form>
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
-            Đóng
-          </button>
-          <button
-            type="button"
-            @click="confirmSaveCostcenter()"
-            class="btn btn-primary"
-          >
-            Lưu
-          </button>
-        </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Đóng
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Lưu
+            </button>
+          </div>
+        </form>
       </div>
       <!-- /.modal-content -->
     </div>

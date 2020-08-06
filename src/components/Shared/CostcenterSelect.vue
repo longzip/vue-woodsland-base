@@ -1,7 +1,7 @@
 <template>
   <div class="form-group">
     <label>Phòng ban</label>
-    <select class="form-control">
+    <select class="form-control" v-model="costcenter">
       <option selected disabled>Chọn một</option>
       <option
         v-for="option in costcenters"
@@ -10,6 +10,7 @@
         >{{ option.name }}</option
       >
     </select>
+    <span>Selected: {{ costcenter }}</span>
   </div>
 </template>
 

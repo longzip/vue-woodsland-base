@@ -1,21 +1,11 @@
 <template>
-  <div
-    class="modal fade"
-    id="userModalCenter"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="userModalCenterTitle"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal fade" id="user-modal">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" v-show="!editmode" id="addNewLabel">
-            Thêm nhân sự
-          </h5>
-          <h5 class="modal-title" v-show="editmode" id="addNewLabel">
-            Cập nhật thông tin nhân sự
-          </h5>
+          <h4 class="modal-title">
+            Nhân viên
+          </h4>
           <button
             type="button"
             class="close"
@@ -25,7 +15,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form @submit.prevent="editmode ? updateUser() : createUser()">
+        <form @submit.prevent="confirmSave">
           <div class="modal-body">
             <div class="form-group">
               <input
@@ -54,7 +44,7 @@
                 class="form-control"
               />
             </div>
-            <costcenter-select :costcenter="costcenter" />
+            <costcenter-select :costcenter="user.username" />
             <!-- <div class="form-group">
               <label>Vai trò</label>
               <multiselect
@@ -89,15 +79,12 @@
               />
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">
-              Hủy
+          <div class="modal-footer  justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Đóng
             </button>
-            <button v-show="editmode" type="submit" class="btn btn-success">
-              Lưu thông tin
-            </button>
-            <button v-show="!editmode" type="submit" class="btn btn-primary">
-              Thêm nhân sự
+            <button type="submit" class="btn btn-primary">
+              Lưu
             </button>
           </div>
         </form>
@@ -107,7 +94,25 @@
 </template>
 
 <script>
-export default { props: ["editmode", "user"] };
+import { mapActions, mapGetters } from "vuex";
+import CostcenterSelect from "@/components/Shared/CostcenterSelect.vue";
+export default {
+  props: ["user"],
+  components: {
+    CostcenterSelect
+  },
+  computed: {
+    ...mapGetters("users", ["successStatus"])
+  },
+  methods: {
+    ...mapActions("users", ["addUser"]),
+    confirmSave() {
+      this.addUser(this.user);
+      if (this.successStatus) {
+        // eslint-disable-next-line no-undef
+        $("#user-modal").modal("hide");
+      }
+    }
+  }
+};
 </script>
-
-<style lang="scss" scoped></style>

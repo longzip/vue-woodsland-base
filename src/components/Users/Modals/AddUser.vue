@@ -54,17 +54,7 @@
                 class="form-control"
               />
             </div>
-            <div class="form-group">
-              <label>Phòng ban</label>
-              <select class="form-control">
-                <option selected="" disabled="">Chọn một</option>
-                <option>option 1</option>
-                <option>option 2</option>
-                <option>option 3</option>
-                <option>option 4</option>
-                <option>option 5</option>
-              </select>
-            </div>
+            <costcenter-select :costcenter="costcenter" />
             <!-- <div class="form-group">
               <label>Vai trò</label>
               <multiselect

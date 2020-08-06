@@ -15,7 +15,7 @@ const state = {
 
 const mutations = {
   addCompany(state, payload) {
-    state.companies.push(payload)
+    state.companies.push(payload);
   }
 };
 

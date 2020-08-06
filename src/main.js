@@ -44,7 +44,7 @@ messaging
 require("./bootstrap");
 window.Vue = require("vue");
 
-window.swal = swal;
+window.Swal = swal;
 
 const toast = swal.mixin({
   toast: true,

@@ -4,48 +4,48 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Danh phòng ban</h3>
-          <div class="card-tools">
-            <a href="#" @click="newModal" class="btn btn-primary">
-              Thêm nhân viên <i class="fa fa-user-plus"></i>
-            </a>
-          </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
-          <users-todo />
+          <costcenters-todo :costcenters="costcenters" />
         </div>
         <!-- /.card-body -->
+        <div class="card-footer clearfix">
+          <button
+            type="button"
+            @click="newModal"
+            class="btn btn-info float-right"
+          >
+            <i class="fas fa-plus"></i> Thêm phòng ban
+          </button>
+        </div>
       </div>
       <!-- /.card -->
-      <add-user :editmode="editmode" :user="user" />
+      <add-costcenter :costcenter="costcenter" />
     </section>
   </div>
 </template>
 <script>
-import UsersTodo from "@/components/Users/UsersTodo.vue";
-import AddUser from "@/components/Users/Modals/AddUser.vue";
+import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
+import CostcentersTodo from "@/components/Costcenters/CostcentersTodo.vue";
+
+import AddCostcenter from "@/components/Costcenters/Modals/AddCostcenter.vue";
 export default {
   name: "Users",
   components: {
-    UsersTodo,
-    AddUser
+    CostcentersTodo,
+    AddCostcenter
   },
-  data() {
-    return {
-      editmode: false,
-      costcenters: [],
-      costcenter: {
-        id: "",
-        code: "",
-        name: ""
-      }
-    };
+  computed: {
+    ...mapGetters("costcenters", ["costcenters", "costcenter"])
   },
   methods: {
+    ...mapActions("costcenters", ["resetCostcenter"]),
     newModal() {
-      this.editmode = false;
+      this.resetCostcenter();
       // eslint-disable-next-line no-undef
-      $("#userModalCenter").modal("show");
+      $("#costcenter-modal").modal("show");
     }
   }
 };

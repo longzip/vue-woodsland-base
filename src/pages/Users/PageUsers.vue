@@ -7,7 +7,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
-          <users-todo :usersTodo="usersTodo" />
+          <users-todo :users="users" />
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">

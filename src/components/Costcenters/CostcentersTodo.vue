@@ -42,7 +42,7 @@ export default {
   methods: {
     ...mapActions("costcenters", ["selectCostcenter", "deleteCostcenter"]),
     showModalsCostcenter(costcenter) {
-      this.selectCostcenter(costcenter)
+      this.selectCostcenter(costcenter);
       // eslint-disable-next-line no-undef
       $("#costcenter-modal").modal("show");
     },

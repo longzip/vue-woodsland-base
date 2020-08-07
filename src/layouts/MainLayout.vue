@@ -37,7 +37,7 @@
             />
           </div>
           <div class="info">
-            <a href="#" class="d-block">Lỗ Văn Long</a>
+            <a href="#" class="d-block">{{ user.name }}</a>
           </div>
         </div>
 
@@ -67,10 +67,24 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "MainLayout",
   components: {
     "main-menu": require("../components/Menu.vue").default
+  },
+  computed: {
+    ...mapGetters("users", ["user"])
+  },
+  methods: {
+    ...mapActions("users", ["addUser"]),
+    confirmSave() {
+      this.addUser(this.user);
+      if (this.successStatus) {
+        // eslint-disable-next-line no-undef
+        $("#user-modal").modal("hide");
+      }
+    }
   }
 };
 </script>

@@ -28,13 +28,38 @@ let muahang = {
   ngayDeXuat: moment()
     .subtract(-2, "days")
     .format()
-    .slice(0, 10)
+    .slice(0, 10),
+  userId: ""
 };
 
 const state = {
   matHang,
   muahang,
-  muahangs: [muahang]
+  muahangs: [
+    {
+      id: "72f21213-340d-40dc-88a6-2b678b926679",
+      soPhieu: "MH00001",
+      noiDung:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+      trangThai: "Hoàn thành",
+      MuaHangCTs: [
+        {
+          id: "e003217b-d2bd-45ee-b228-8953d16e2b44",
+          tenMatHang: "Sed ut perspiciatis unde omnis iste",
+          xuatXu: "Rackham",
+          donViTinh: "C",
+          soLuong: 1,
+          thoiGianCungCap: "2020-08-09",
+          yeuCauKyThuat: "we denounce with righteous",
+          lyDoYeuCau:
+            "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire",
+          muaHangId: "72f21213-340d-40dc-88a6-2b678b926679"
+        }
+      ],
+      ngayDeXuat: "2020-08-09",
+      userId: "45d05012-bc5d-4ac6-9ce5-65ba6747cdf6"
+    }
+  ]
 };
 
 const mutations = {

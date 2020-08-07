@@ -44,7 +44,7 @@
                 class="form-control"
               />
             </div>
-            <costcenter-select :costcenter="user.username" />
+            <costcenter-select :item="user" />
             <!-- <div class="form-group">
               <label>Vai trò</label>
               <multiselect

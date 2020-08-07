@@ -4,6 +4,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import moment from "moment";
+moment.locale("vi");
 import VueProgressBar from "vue-progressbar";
 import swal from "sweetalert2";
 import * as firebase from "firebase";
@@ -66,8 +67,12 @@ Vue.filter("upText", function(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
-Vue.filter("myDate", function(created) {
-  return moment(created).format("MMMM Do YYYY");
+Vue.filter("ngay", function(created) {
+  return moment(created).format("L");
+});
+
+Vue.filter("luc", function(created) {
+  return moment(created).fromNow();
 });
 
 new Vue({

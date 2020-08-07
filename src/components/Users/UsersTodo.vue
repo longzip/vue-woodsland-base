@@ -11,37 +11,32 @@
         <th>Cập nhật</th>
         <th>Sửa/Xóa</th>
       </tr>
-      <tr v-for="user in users.data" :key="user.id">
+      <tr v-for="user in users" :key="user.id">
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.username }}</td>
         <td>
           <span
-            v-for="role in usersTodo.roles"
+            v-for="role in users.roles"
             class="badge badge-info"
             :key="role.id"
             >{{ role }}</span
           >
-          &nbsp;
         </td>
         <td>
-          <span
-            v-for="costcenter in getName(usersTodo.costcenters)"
-            :key="costcenter.id"
-            class="badge badge-light"
-            >{{ costcenter }}</span
-          >
+          {{ user.costcenter }}
         </td>
-        <td>{{ user.update_at | myDate }}</td>
-        <td>
-          <a href="#" @click="editModal(user)">
-            <i class="fa fa-edit blue"></i>
-          </a>
-          /
-          <a href="#" @click="deleteUser(user)">
-            <i class="fa fa-trash red"></i>
-          </a>
+        <td>{{ user.updatedAt }}</td>
+        <td class="text-right py-0 align-middle">
+          <div class="btn-group btn-group-sm">
+            <button @click="showModals(user)" class="btn btn-info">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button @click="confirmDelete(user.id)" class="btn btn-danger">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -49,7 +44,35 @@
 </template>
 
 <script>
-export default { props: ["usersTodo"] };
+import { mapActions } from "vuex";
+export default {
+  props: ["users"],
+  methods: {
+    ...mapActions("users", ["deleteUser", "selectUser"]),
+    showModals(user) {
+      this.selectUser(user);
+      // eslint-disable-next-line no-undef
+      $("#user-modal").modal("show");
+    },
+    confirmDelete(id) {
+      // eslint-disable-next-line no-undef
+      Swal.fire({
+        title: "Bạn có muốn xóa?",
+        text: "Sau khi xóa bạn không thể khôi phục được!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có, xóa giúp tôi!",
+        cancelButtonText: "Không"
+      }).then(result => {
+        if (result.value) {
+          this.deleteUser(id);
+          // eslint-disable-next-line no-undef
+          Swal.fire("Đã xóa!", "Yêu cầu của bạn đã được thực hiện.", "success");
+        }
+      });
+    }
+  }
+};
 </script>
-
-<style lang="scss" scoped></style>

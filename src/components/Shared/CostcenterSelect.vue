@@ -1,7 +1,7 @@
 <template>
   <div class="form-group">
     <label>Phòng ban</label>
-    <select class="form-control" v-model="costcenter">
+    <select class="form-control" v-model="item.costcenter">
       <option selected disabled>Chọn một</option>
       <option
         v-for="option in costcenters"
@@ -18,7 +18,7 @@
 import { mapGetters } from "vuex";
 // import CostcenterSelect from "@/components/Shared/CostcenterSelect.vue";
 export default {
-  props: ["costcenter"],
+  props: ["item"],
 
   computed: {
     ...mapGetters("costcenters", ["costcenters"])

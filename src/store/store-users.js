@@ -1,4 +1,3 @@
-import Vue from "vue";
 import { v4 as uuidv4 } from "uuid";
 
 let user = {
@@ -13,7 +12,34 @@ let user = {
 
 const state = {
   user,
-  users: [],
+  users: {
+    data: [
+      {
+        id: "45d05012-bc5d-4ac6-9ce5-65ba6747cdf6",
+        name: "Heroku",
+        username: "09T600",
+        password: "",
+        roles: [],
+        costcenter: "063e6fd2-add3-464d-bf09-627289f7de68",
+        parentId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1",
+        email: "heroku@localhost.com",
+        createdAt: "2020-08-05T17:03:29.000000Z",
+        updatedAt: "2020-08-05T17:03:29.000000Z"
+      },
+      {
+        id: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1",
+        name: "TEST",
+        username: "09T601",
+        password: "",
+        roles: [],
+        costcenter: "063e6fd2-add3-464d-bf09-627289f7de68",
+        parentId: "45d05012-bc5d-4ac6-9ce5-65ba6747cdf6",
+        email: "test@gvcmelinh.com",
+        createdAt: "2020-08-05T17:13:11.000000Z",
+        updatedAt: "2020-08-05T17:13:11.000000Z"
+      }
+    ]
+  },
   successStatus: true
 };
 
@@ -23,12 +49,13 @@ const mutations = {
     console.log(payload);
   },
 
-  deleteTask(state, id) {
-    Vue.delete(state.tasks, id);
+  deleteUser(state, id) {
+    console.log("delete User");
+    console.log(id);
   },
 
   addUser(state, payload) {
-    state.users.push({ ...payload, id: uuidv4() });
+    state.users.data.push({ ...payload, id: uuidv4() });
   },
 
   resetUser(state) {
@@ -44,6 +71,8 @@ const mutations = {
     };
   },
 
+  selectUser: (state, user) => (state.user = user),
+
   setSuccessStatus(state, payload) {
     state.successStatus = payload;
   }
@@ -52,6 +81,10 @@ const mutations = {
 const actions = {
   updateUser({ commit }, payload) {
     commit("updateUser", payload);
+  },
+
+  selectUser({ commit }, payload) {
+    commit("selectUser", payload);
   },
 
   deleteUser({ commit }, id) {
@@ -71,7 +104,7 @@ const actions = {
 
 const getters = {
   users: state => {
-    return state.users;
+    return state.users.data;
   },
   user: state => {
     return state.user;

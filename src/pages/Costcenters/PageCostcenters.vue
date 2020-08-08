@@ -39,12 +39,23 @@ export default {
     ...mapGetters("costcenters", ["costcenters", "costcenter"])
   },
   methods: {
-    ...mapActions("costcenters", ["resetCostcenter"]),
+    ...mapActions("costcenters", ["resetCostcenter", "getAll"]),
     newModal() {
       this.resetCostcenter();
       // eslint-disable-next-line no-undef
       $("#costcenter-modal").modal("show");
+    },
+    loadData: async () => {
+      await this.getAll();
+      this.$Progress.start();
     }
+  },
+  // mounted() {
+  //   this.$Progress.finish();
+  // },
+  created() {
+    this.$Progress.start();
+    this.getAll();
   }
 };
 </script>

@@ -5,9 +5,11 @@ import router from "./router";
 import store from "./store";
 import moment from "moment";
 moment.locale("vi");
-import VueProgressBar from "vue-progressbar";
 import swal from "sweetalert2";
 import * as firebase from "firebase";
+import axios from "axios";
+Vue.prototype.$axios = axios;
+axios.defaults.baseURL = "http://localhost:5000";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCxM6VmxAI_-0-SKuwC6-xZmAXZuvj7gto",
@@ -46,6 +48,7 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 window.Swal = swal;
+Vue.prototype.Swal = swal;
 
 const toast = swal.mixin({
   toast: true,
@@ -55,13 +58,9 @@ const toast = swal.mixin({
 });
 
 window.toast = toast;
+Vue.prototype.$toast = toast;
 
 Vue.config.productionTip = false;
-Vue.use(VueProgressBar, {
-  color: "rgb(143, 255, 199)",
-  failedColor: "red",
-  height: "3px"
-});
 
 Vue.filter("upText", function(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);

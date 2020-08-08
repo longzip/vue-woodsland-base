@@ -177,18 +177,20 @@ const state = {
 
 const mutations = {
   updateApprove(state, payload) {
-    Object.assign(state.approve, payload);
+    state.approve = payload;
   }
 };
 
 const actions = {
-  notApproved({ commit }) {
+  notApproved({ commit }, payload) {
     console.log("notApproved");
-    commit("updateApprove", { status: "Hủy", completed: false });
+    payload.status = "Hủy"
+    commit("updateApprove", payload);
   },
-  approved({ commit }) {
+  approved({ commit }, payload) {
     console.log("approved");
-    commit("updateApprove", { status: "Phê duyệt", completed: true });
+    payload.status = "Phê duyệt"
+    commit("updateApprove", payload);
   }
 };
 

@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <vue-progress-bar></vue-progress-bar>
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
       <!-- Left navbar links -->
@@ -15,7 +16,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="/" class="brand-link">
         <img
           src="dist/img/logo.png"
           alt="AdminLTE Logo"
@@ -62,19 +63,24 @@
       >
       Địa chỉ: Nhà máy Thuận Hưng, lô số 49K, KCN Quang Minh, Huyện Mê Linh,
       Thành phố Hà Nội.
+      <div class="vld-parent">
+        <loading :active.sync="isLoading"></loading>
+      </div>
     </footer>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Loading from "vue-loading-overlay";
 export default {
   name: "MainLayout",
   components: {
+    Loading,
     "main-menu": require("../components/Menu.vue").default
   },
   computed: {
-    ...mapGetters("users", ["user"])
+    ...mapGetters("users", ["user", "isLoading"])
   },
   methods: {
     ...mapActions("users", ["addUser"]),

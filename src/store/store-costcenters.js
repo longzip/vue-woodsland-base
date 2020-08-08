@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { v4 as uuidv4 } from "uuid";
+import client from "../utils";
 
 let costcenter = {
   id: "",
@@ -13,36 +14,7 @@ const state = {
   costcenter,
   loading: false,
   successStatus: true,
-  costcenters: [
-    {
-      id: "e378f3b1-9e35-4090-bc0a-92297d41a9e3",
-      code: "TH.IT",
-      name: "Phòng CNTT",
-      companyId: "c4ced5f1-06bb-49ed-bbf0-cfd3732bb696",
-      userId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1"
-    },
-    {
-      id: "87406581-450a-4df4-8117-d32ae12393dc",
-      code: "TH.NS",
-      name: "Phòng Nhân Sự",
-      companyId: "c4ced5f1-06bb-49ed-bbf0-cfd3732bb696",
-      userId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1"
-    },
-    {
-      id: "063e6fd2-add3-464d-bf09-627289f7de68",
-      code: "TH.HC",
-      name: "Phòng Hành Chính",
-      companyId: "c4ced5f1-06bb-49ed-bbf0-cfd3732bb696",
-      userId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1"
-    },
-    {
-      id: "6219d981-ae8d-453c-87c6-d30b0ec79d1a",
-      code: "TH.KT",
-      name: "Phòng Kế Toán",
-      companyId: "c4ced5f1-06bb-49ed-bbf0-cfd3732bb696",
-      userId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1"
-    }
-  ]
+  costcenters: []
 };
 
 const mutations = {
@@ -73,19 +45,30 @@ const mutations = {
     console.log(payload);
   },
 
-  saveCostcenter(state, payload) {
-    console.log("Đã lưu thành công");
-    console.log(payload);
+  saveCostcenter: async (state, payload) => {
+    let costcenter = await client.put("/api/v1/costcenters/", payload);
+    if (costcenter) payload = costcenter.data;
   },
 
   setSuccess(state, payload) {
     console.log("Set success");
     console.log(payload);
     state.successStatus = payload;
+  },
+
+  setCostcenters(state, payload) {
+    console.log("set costcenters");
+    console.log(payload);
+    state.costcenters = payload;
   }
 };
 
 const actions = {
+  getAll: async ({ commit }) => {
+    let costcenters = await client.get("/api/v1/costcenters/");
+    if (costcenters) commit("setCostcenters", costcenters.data);
+  },
+
   resetCostcenter({ commit }) {
     commit("resetCostcenter");
   },
@@ -121,7 +104,7 @@ const actions = {
 
 const getters = {
   costcenters: state => {
-    return state.costcenters;
+    return state.costcenters.data;
   },
   costcenter: state => {
     return state.costcenter;

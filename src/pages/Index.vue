@@ -27,11 +27,14 @@
                   v-model="approve.completed"
                   name="todo1"
                   :id="approve.id"
-                  @click="approve.completed ? notApproved() : approved()"
+                  @click="
+                    approve.completed ? notApproved(approve) : approved(approve)
+                  "
                 /><label :for="approve.id"></label>
               </div>
-              <span class="text">Design a nice theme</span
-              ><small class="badge badge-danger"
+              <span class="text">Design a nice theme</span>
+              <span class="text">{{ approve.status }}</span>
+              <small class="badge badge-danger"
                 ><i class="far fa-clock"></i>
                 {{ approve.createdAt | luc }}</small
               >

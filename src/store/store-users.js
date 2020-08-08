@@ -40,7 +40,8 @@ const state = {
       }
     ]
   },
-  successStatus: true
+  successStatus: true,
+  isLoading: false
 };
 
 const mutations = {
@@ -108,6 +109,9 @@ const getters = {
   },
   user: state => {
     return state.user;
+  },
+  isLoading: state => {
+    return state.isLoading;
   },
   successStatus: state => {
     return state.successStatus;

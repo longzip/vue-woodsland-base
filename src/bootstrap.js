@@ -23,6 +23,7 @@ try {
  */
 
 window.axios = require("axios");
+window.axios.baseURL = "http://localhost:5000";
 
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

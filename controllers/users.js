@@ -5,7 +5,9 @@ const jwt = require("jsonwebtoken");
 const stage = 10;
 
 function validateUser(user) {
-  const schema = {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+    costcenter: Joi.string().required(),
     name: Joi.string(),
     username: Joi.string()
       .alphanum()
@@ -15,86 +17,97 @@ function validateUser(user) {
     password: Joi.string()
       .regex(/^[a-zA-Z0-9]{3,30}$/)
       .required(),
+    role: Joi.string().required(),
+    avatar: Joi.string().required(),
     email: Joi.string().email({ minDomainSegments: 2 })
-  };
-  return Joi.validate(user, schema);
+  });
+  return schema.validate(user);
+}
+
+function validateLogin(user) {
+  const schema = Joi.object({
+    username: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+    password: Joi.string()
+      .regex(/^[a-zA-Z0-9]{1,30}$/)
+      .required()
+  });
+  return schema.validate(user);
 }
 
 module.exports = {
-  delete: (req, res) => {
+  delete: async (req, res) => {
     let result = {};
     let status = 200;
 
-    User.findByPk(req.params.id)
-      .then(item => {
-        result.status = status;
-        result.result = item.destroy();
-        return res.status(status).send(result);
-      })
-      .catch(err => {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        return res.status(status).send(result);
-      });
-  },
-
-  add: (req, res) => {
-    let result = {};
-    let status = 201;
-
-    let { error, value } = validateUser(req.body);
-
-    if (error) {
-      status = 500;
-      result.status = status;
-      result.error = error;
-      return res.status(status).send(result);
-    }
-
-    bcrypt.hash(value.password, stage.saltingRounds, function(err, hash) {
-      if (err) {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        return res.status(status).send(result);
+    try {
+      let user = await User.findByPk(req.params.id);
+      if (user === null) {
+        status = 400;
       } else {
-        value.password = hash;
-        User.create(value)
-          .then(user => {
-            result.status = status;
-            result.result = user;
-            return res.status(status).send(result);
-          })
-          .catch(err => {
-            status = 500;
-            result.status = status;
-            result.error = err;
-            return res.status(status).send(result);
-          });
+        let affectedRows = await user.destroy();
+        result.data = affectedRows;
       }
-    });
+    } catch (error) {
+      status = 500;
+      console.log(error);
+      result.error = error;
+    }
+
+    return res.status(status).send(result);
   },
 
-  show: (req, res) => {
+  add: async (req, res) => {
+    let result = {};
+    let status = 201;
+
+    let { error, value } = validateUser(req.body);
+
+    if (error) {
+      status = 500;
+      result.status = status;
+      result.error = error;
+      return res.status(status).send(result);
+    }
+
+    try {
+      const hash = await bcrypt.hashSync(value.password, stage.saltingRounds);
+      value.password = hash;
+      let user = await User.create(value);
+      result.data = user;
+    } catch (error) {
+      status = 500;
+      console.log(error);
+      result.error = error;
+    }
+
+    return res.status(status).send(result);
+  },
+
+  show: async (req, res) => {
     let result = {};
     let status = 200;
 
-    User.findByPk(req.params.id)
-      .then(uom => {
-        result.status = status;
-        result.result = uom;
-        return res.status(status).send(result);
-      })
-      .catch(err => {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        return res.status(status).send(result);
-      });
+    try {
+      let user = await User.findByPk(req.params.id);
+      if (user == null) {
+        status = 400;
+      } else {
+        result.data = user;
+      }
+    } catch (error) {
+      console.log(error);
+      status = 500;
+      result.error = error;
+    }
+
+    return res.status(status).send(result);
   },
 
-  update: (req, res) => {
+  update: async (req, res) => {
     let result = {};
     let status = 201;
 
@@ -105,134 +118,86 @@ module.exports = {
       result.error = error;
       return res.status(status).send(result);
     }
-    if (value.password) {
-      bcrypt.hash(value.password, stage.saltingRounds, function(err, hash) {
-        if (err) {
-          status = 500;
-          result.status = status;
-          result.error = err;
-          return res.status(status).send(result);
-        } else {
-          value.password = hash;
-          User.update(value, {
-            where: {
-              id: req.params.id
-            }
-          })
-            .then(affectedRows => {
-              result.status = status;
-              result.result = affectedRows;
-              return res.status(status).send(result);
-            })
-            .catch(err => {
-              status = 500;
-              result.status = status;
-              result.error = err;
-              return res.status(status).send(result);
-            });
-        }
-      });
-    } else {
-      User.update(value, {
+    try {
+      if (value.password)
+        value.password = await bcrypt.hashSync(
+          value.password,
+          stage.saltingRounds
+        );
+      else delete value.password;
+
+      let affectedRows = await User.update(value, {
         where: {
           id: req.params.id
         }
-      })
-        .then(affectedRows => {
-          result.status = status;
-          result.result = affectedRows;
-          return res.status(status).send(result);
-        })
-        .catch(err => {
-          status = 500;
-          result.status = status;
-          result.error = err;
-          return res.status(status).send(result);
-        });
+      });
+      result.data = affectedRows;
+    } catch (error) {
+      console.log(error);
+      status = 500;
+      result.error = error;
     }
+    return res.status(status).send(result);
   },
 
-  getAll: (req, res) => {
+  getAll: async (req, res) => {
     let result = {};
     let status = 200;
 
-    //fdsflkdl4
-    // result.status = status;
-    // result.result = [];
-    // return res.status(status).send(result);
-
-    User.findAll()
-      .then(users => {
-        result.status = status;
-        result.result = users;
-        return res.status(status).send(result);
-      })
-      .catch(err => {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        return res.status(status).send(result);
-      });
+    try {
+      let users = await User.findAll();
+      result.data = users;
+    } catch (error) {
+      console.log(error);
+      status = 500;
+      result.error = error;
+    }
+    return res.status(status).send(result);
   },
 
-  login: (req, res) => {
+  login: async (req, res) => {
     let result = {};
     let status = 200;
-    const { username, password } = req.body;
 
-    User.findOne({ raw: true, where: { username } })
-      .then(user => {
-        // We could compare passwords in our model instead of below as well
-        bcrypt
-          .compare(password, user.password)
-          .then(match => {
-            if (match) {
-              status = 200;
-              // Create a token
+    let { error, value } = validateLogin(req.body);
 
-              const payload = { user: user.name };
-              const options = {
-                expiresIn: "2d",
-                issuer: "https://woodsland.com.vn"
-              };
-              const secret = "sdkfjksdjkfjkjfsiojfksdjkfsd";
+    if (error) {
+      status = 500;
+      result.status = status;
+      result.error = error;
+      return res.status(status).send(result);
+    }
+    const { username, password } = value;
+    console.log(password);
 
-              const token = jwt.sign(payload, secret, options);
+    try {
+      let user = await User.findOne({ raw: true, where: { username } });
+      if (user == null) {
+        status = 400;
+      } else {
+        let match = bcrypt.compareSync(password, user.password);
+        if (match) {
+          const payload = { user: user.name };
+          const options = {
+            expiresIn: "2d",
+            issuer: "https://woodsland.com.vn"
+          };
+          const secret = "sdkfjksdjkfjkjfsiojfksdjkfsd";
 
-              result.token = token;
-              result.status = status;
-              result.result = Object.assign(user, {
-                roles: ["admin"],
-                rights: ["can_view_users"]
-              });
-              // result.result = {
-              //   id: user.id,
-              //   name: user.name,
-              //   username: user.uom,
-              //   email: user.username,
-              //   token,
-              //   roles: ["admin"],
-              //   rights: ["can_view_users"]
-              // };
-            } else {
-              status = 401;
-              result.status = status;
-              result.error = `Authentication error`;
-            }
-            return res.status(status).send(result);
-          })
-          .catch(err => {
-            status = 500;
-            result.status = status;
-            result.error = err;
-            return res.status(status).send(result);
-          });
-      })
-      .catch(err => {
-        status = 500;
-        result.status = status;
-        result.error = err;
-        res.status(status).send(result);
-      });
+          const token = await jwt.sign(payload, secret, options);
+
+          result.token = token;
+        } else {
+          status = 401;
+          result.status = status;
+          result.error = `Authentication error`;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      status = 500;
+      result.error = error;
+    }
+    return res.status(status).send(result);
   }
 };

@@ -9,7 +9,7 @@ import swal from "sweetalert2";
 import * as firebase from "firebase";
 import axios from "axios";
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = "http://localhost:5000";
+// axios.defaults.baseURL = "http://localhost:5000";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCxM6VmxAI_-0-SKuwC6-xZmAXZuvj7gto",

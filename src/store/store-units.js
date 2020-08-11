@@ -8,8 +8,8 @@ const state = {
 
 const mutations = {
   deleteUnit(state, id) {
-    console.log("delete unit");
-    console.log(id);
+    let index = state.units.data.findIndex(item => item.id === id);
+    state.units.data.splice(index, 1);
   },
 
   addUnit(state, payload) {

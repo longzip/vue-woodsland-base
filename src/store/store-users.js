@@ -11,8 +11,8 @@ const state = {
 
 const mutations = {
   deleteUser(state, id) {
-    console.log("delete User");
-    console.log(id);
+    let index = state.users.data.findIndex(item => item.id === id);
+    state.users.data.splice(index, 1);
   },
 
   addUser(state, payload) {

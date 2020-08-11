@@ -1,13 +1,18 @@
-const { Unit, data } = require("wms-sequelize");
+const { OrderLine, data } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
 
-function validateUnit(value) {
+function validateUser(orderLine) {
   const schema = Joi.object({
     id: Joi.string().required(),
+    userId: Joi.string().required(),
+    costcenterId: Joi.string().required(),
+    companyId: Joi.string().required(),
     code: Joi.string().required(),
-    name: Joi.string().required()
+    name: Joi.string().required(),
+    note: Joi.string().required(),
+    status: Joi.string().required()
   });
-  return schema.validate(value);
+  return schema.validate(orderLine);
 }
 
 module.exports = {
@@ -16,11 +21,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let unit = await Unit.findByPk(req.params.id);
-      if (unit === null) {
+      let orderLine = await OrderLine.findByPk(req.params.id);
+      if (orderLine === null) {
         status = 400;
       } else {
-        let affectedRows = await unit.destroy();
+        let affectedRows = await orderLine.destroy();
         result.data = affectedRows;
       }
     } catch (error) {
@@ -36,7 +41,7 @@ module.exports = {
     let result = {};
     let status = 201;
 
-    let { error, value } = validateUnit(req.body);
+    let { error, value } = validateUser(req.body);
 
     if (error) {
       status = 500;
@@ -46,10 +51,10 @@ module.exports = {
     }
 
     try {
-      let unit = await Unit.create(value, {
+      let orderLine = await orderLine.create(value, {
         include: []
       });
-      result.data = unit;
+      result.data = orderLine;
     } catch (error) {
       status = 500;
       console.log(error);
@@ -64,11 +69,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let unit = await Unit.findByPk(req.params.id);
-      if (unit == null) {
+      let orderLine = await OrderLine.findByPk(req.params.id);
+      if (orderLine == null) {
         status = 400;
       } else {
-        result.data = unit;
+        result.data = orderLine;
       }
     } catch (error) {
       console.log(error);
@@ -83,7 +88,7 @@ module.exports = {
     let result = {};
     let status = 201;
 
-    let { error, value } = validateUnit(req.body);
+    let { error, value } = validateUser(req.body);
     if (error) {
       status = 500;
       console.log(error);
@@ -92,12 +97,19 @@ module.exports = {
     }
 
     try {
-      let affectedRows = await Unit.update(value, {
-        where: {
-          id: req.params.id
-        }
-      });
-      result.data = affectedRows;
+      let orderLine = await orderLine.findByPk(req.params.id);
+      if (orderLine == null) {
+        status = 400;
+      } else {
+        orderLine.userId = value.userId;
+        orderLine.costcenterId = value.costcenterId;
+        orderLine.companyId = value.companyId;
+        orderLine.code = value.code;
+        orderLine.name = value.name;
+        orderLine.note = value.note;
+        orderLine.status = value.status;
+        result.data = await orderLine.save();
+      }
     } catch (error) {
       console.log(error);
       status = 500;
@@ -111,8 +123,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let units = await Unit.findAll();
-      result.data = units;
+      let orderLines = await OrderLine.findAll();
+      result.data = orderLines;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -125,8 +137,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let units = await Unit.bulkCreate(req.body);
-      result.data = units;
+      let orderLines = await OrderLine.bulkCreate(req.body);
+      result.data = orderLines;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -137,7 +149,7 @@ module.exports = {
   backup: async (req, res) => {
     let result = {};
     let status = 200;
-    result.data = await data.units;
+    result.data = await data.orderLines;
     return res.status(status).send(result);
   }
 };

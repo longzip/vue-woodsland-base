@@ -18,10 +18,17 @@ const mutations = {
 
   resetOrderLine(state) {
     state.orderLine = {
-      ...state.orderLine.data,
+      ...state.orderLine,
       id: "",
+      userId: "",
+      costcenterId: "",
+      companyId: "",
+      unitId: "",
       code: "",
-      name: ""
+      name: "",
+      quantity: 0,
+      note: "",
+      status: ""
     };
   },
 

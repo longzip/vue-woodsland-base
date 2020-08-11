@@ -7,8 +7,10 @@ function validateUser(orderLine) {
     userId: Joi.string().required(),
     costcenterId: Joi.string().required(),
     companyId: Joi.string().required(),
+    unitId: Joi.string().required(),
     code: Joi.string().required(),
     name: Joi.string().required(),
+    quantity: Joi.number().required(),
     note: Joi.string().required(),
     status: Joi.string().required()
   });
@@ -104,8 +106,10 @@ module.exports = {
         orderLine.userId = value.userId;
         orderLine.costcenterId = value.costcenterId;
         orderLine.companyId = value.companyId;
+        orderLine.unitId = value.unitId;
         orderLine.code = value.code;
         orderLine.name = value.name;
+        orderLine.quantity = value.quantity;
         orderLine.note = value.note;
         orderLine.status = value.status;
         result.data = await orderLine.save();

@@ -7,6 +7,8 @@ import units from "./store-units";
 import companies from "./store-companies";
 import costcenters from "./store-costcenters";
 import approves from "./store-approves";
+import orders from "./store-orders";
+import orderLines from "./store-orderLines";
 
 Vue.use(Vuex);
 
@@ -16,6 +18,8 @@ export default new Vuex.Store({
     units,
     companies,
     costcenters,
+    orders,
+    orderLines,
     approves,
     muahangs
   }

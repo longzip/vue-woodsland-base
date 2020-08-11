@@ -10,7 +10,7 @@ const routes = [
       },
       {
         path: "them-phieu-mua-hang",
-        component: () => import("@/pages/DeXuatMuaHang/ThemPhieuMuaHang.vue")
+        component: () => import("@/pages/Orders/PageOrder.vue")
       },
       {
         path: "in-phieu-mua-hang",

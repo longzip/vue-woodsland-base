@@ -18,7 +18,7 @@ const mutations = {
 
   resetOrder(state) {
     state.order = {
-      ...state.order.data,
+      ...state.order,
       id: "",
       code: "",
       name: ""

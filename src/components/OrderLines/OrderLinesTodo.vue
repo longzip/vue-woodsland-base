@@ -32,7 +32,12 @@
             <td>{{ orderLine.unitId }}</td>
             <td class="text-right py-0 align-middle">
               <div class="btn-group btn-group-sm">
-                <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                <button
+                  @click="selectOrderLine(orderLine)"
+                  class="btn btn-info"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
                 <button
                   @click="confirmDeleteOrderLine(orderLine.id)"
                   class="btn btn-danger"

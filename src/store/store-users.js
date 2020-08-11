@@ -48,8 +48,9 @@ const actions = {
     commit("selectUser", payload);
   },
 
-  deleteUser({ commit }, id) {
-    commit("deleteUser", id);
+  deleteUser: async ({ commit }, id) => {
+    let data = await client.delete("/api/v1/users/" + id);
+    if (data) commit("deleteUser", id);
   },
 
   addUser: async ({ commit }, user) => {

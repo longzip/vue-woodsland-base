@@ -51,7 +51,7 @@ module.exports = {
     }
 
     try {
-      let order = await order.create(value, {
+      let order = await Order.create(value, {
         include: []
       });
       result.data = order;
@@ -97,7 +97,7 @@ module.exports = {
     }
 
     try {
-      let order = await order.findByPk(req.params.id);
+      let order = await Order.findByPk(req.params.id);
       if (order == null) {
         status = 400;
       } else {

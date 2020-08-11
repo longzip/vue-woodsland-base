@@ -12,16 +12,22 @@ const mutations = {
     state.orders.data.splice(index, 1);
   },
 
-  addorder(state, payload) {
+  addOrder(state, payload) {
     state.orders.data.push(payload.data);
+    state.order = payload.data;
   },
 
   resetOrder(state) {
     state.order = {
       ...state.order,
       id: "",
-      code: "",
-      name: ""
+      userId: "ae3ce99b-f31b-458a-9d8f-2eea180b8cf1",
+      costcenterId: "e378f3b1-9e35-4090-bc0a-92297d41a9e3",
+      companyId: "c4ced5f1-06bb-49ed-bbf0-cfd3732bb696",
+      code: "202011/8TH",
+      name: "Đề xuất mua thiết bị",
+      note: "Mô tả đề xuất nếu có",
+      status: "Mới"
     };
   },
 
@@ -34,11 +40,12 @@ const actions = {
     commit("selectOrder", payload);
   },
 
-  deleteOrder({ commit }, id) {
-    commit("deleteOrder", id);
+  deleteOrder: async ({ commit }, id) => {
+    let data = await client.delete("/api/v1/orders/" + id);
+    if (data) commit("deleteOrder", id);
   },
 
-  addorder: async ({ commit }, order) => {
+  addOrder: async ({ commit }, order) => {
     if (order.id) {
       let data = await client.put("/api/v1/orders/" + order.id, order);
       if (data) order = data.data;
@@ -49,7 +56,7 @@ const actions = {
         id: uuidv4()
       });
       console.log(data);
-      if (data) commit("addorder", data.data);
+      if (data) commit("addOrder", data.data);
     }
   },
   getAllOrders: async ({ commit }) => {

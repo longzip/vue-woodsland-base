@@ -3,27 +3,30 @@
     <thead>
       <tr>
         <th style="width: 10px">#</th>
-        <th>Mã phòng</th>
-        <th>Tên phòng</th>
+        <th>Số</th>
+        <th>Tiêu đề</th>
+        <th>Phòng ban</th>
+        <th>Trạng thái</th>
+        <th>Ngày</th>
         <th style="width: 40px">Sửa/Xóa</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(costcenter, index) in costcenters" :key="costcenter.id">
+      <tr v-for="(order, index) in orders" :key="order.id">
         <td>{{ index + 1 }}</td>
-        <td>{{ costcenter.code }}</td>
-        <td>{{ costcenter.name }}</td>
+        <td>{{ order.code }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ getCostcenterNameById(order.costcenterId) }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.updatedAt | luc }}</td>
 
         <td class="text-right py-0 align-middle">
           <div class="btn-group btn-group-sm">
-            <button
-              @click="showModalsCostcenter(costcenter)"
-              class="btn btn-info"
-            >
+            <button @click="showOrderModal(order)" class="btn btn-info">
               <i class="fas fa-eye"></i>
             </button>
             <button
-              @click="confirmDeleteCostcenter(costcenter.id)"
+              @click="confirmDeleteOrder(order.id)"
               class="btn btn-danger"
             >
               <i class="fas fa-trash"></i>
@@ -36,17 +39,21 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  props: ["costcenters"],
+  props: ["orders"],
+  computed: {
+    ...mapGetters("costcenters", ["costcenters"])
+  },
   methods: {
-    ...mapActions("costcenters", ["selectCostcenter", "deleteCostcenter"]),
-    showModalsCostcenter(costcenter) {
-      this.selectCostcenter(costcenter);
+    ...mapActions("orders", ["selectOrder", "deleteOrder"]),
+    ...mapActions("costcenters", ["getAllCostcenters"]),
+    showOrderModal(order) {
+      this.selectOrder(order);
       // eslint-disable-next-line no-undef
-      $("#costcenter-modal").modal("show");
+      $("#order-modal").modal("show");
     },
-    confirmDeleteCostcenter(id) {
+    confirmDeleteOrder(id) {
       // eslint-disable-next-line no-undef
       Swal.fire({
         title: "Bạn có muốn xóa?",
@@ -59,14 +66,21 @@ export default {
         cancelButtonText: "Không"
       }).then(result => {
         if (result.value) {
-          this.deleteCostcenter(id);
-          // eslint-disable-next-line no-undef
-          Swal.fire("Đã xóa!", "Yêu cầu của bạn đã được thực hiện.", "success");
+          this.deleteOrder(id);
         }
       });
+    },
+    getCostcenterNameById(id) {
+      if (!this.costcenters.data) return "";
+      let foundCostcenter = this.costcenters.data.find(
+        costcenter => costcenter.id === id
+      );
+      if (foundCostcenter) return foundCostcenter.name;
+      return "";
     }
+  },
+  mounted() {
+    this.getAllCostcenters();
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

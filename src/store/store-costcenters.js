@@ -52,9 +52,18 @@ const mutations = {
 };
 
 const actions = {
-  getAll: async ({ commit }) => {
+  getAllCostcenters: async ({ commit }) => {
     let costcenters = await client.get("/api/v1/costcenters/");
     if (costcenters) commit("setCostcenters", costcenters.data);
+  },
+
+  getCostcenterNameById: async ({ state }, id) => {
+    console.log(id);
+    let foundCostcenter = await state.costcenters.data.find(
+      costcenter => costcenter.id === id
+    );
+    if (foundCostcenter) return foundCostcenter.name;
+    return "";
   },
 
   resetCostcenter({ commit }) {
@@ -65,8 +74,9 @@ const actions = {
     commit("selectCostcenter", payload);
   },
 
-  deleteCostcenter({ commit }, id) {
-    commit("deleteCostcenter", id);
+  deleteCostcenter: async ({ commit }, id) => {
+    let data = await client.delete("/api/v1/costcenters/" + id);
+    if (data) commit("deleteCostcenter", id);
   },
 
   addCostcenter: async ({ commit }, costcenter) => {

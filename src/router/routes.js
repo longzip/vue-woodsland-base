@@ -6,7 +6,7 @@ const routes = [
       { path: "", component: () => import("@/pages/Index.vue") },
       {
         path: "mua-hang",
-        component: () => import("@/pages/DeXuatMuaHang/MuaHang.vue")
+        component: () => import("@/pages/Orders/PageOrders.vue")
       },
       {
         path: "them-phieu-mua-hang",

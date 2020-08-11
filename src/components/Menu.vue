@@ -32,12 +32,12 @@
               <p>Đề xuất mua hàng</p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="./them-phieu-mua-hang" class="nav-link">
               <i class="far fa-circle nav-icon green"></i>
               <p>Tạo đề xuất mua hàng</p>
             </a>
-          </li>
+          </li> -->
         </ul>
       </li>
       <li class="nav-item has-treeview menu-open">

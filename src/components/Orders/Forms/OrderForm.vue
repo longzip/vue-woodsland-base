@@ -52,11 +52,29 @@
       </div>
     </div>
     <!-- /.card-body -->
+    <div class="card-footer clearfix">
+      <button @click="resetOrder" class="btn btn-sm btn-secondary float-left">
+        Xóa
+      </button>
+      <button
+        @click="addOrder(order)"
+        class="btn btn-sm btn-primary float-right"
+      >
+        Tiếp theo
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
-  props: ["order"]
+  props: ["order"],
+  methods: {
+    ...mapActions("orders", ["addOrder", "resetOrder"])
+  },
+  created() {
+    this.resetOrder();
+  }
 };
 </script>

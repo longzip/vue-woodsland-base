@@ -3,11 +3,11 @@
     <section class="content">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Danh phòng ban</h3>
+          <h3 class="card-title">Các phiếu đề xuất</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
-          <costcenters-todo :costcenters="costcenters.data" />
+          <orders-todo :orders="orders.data" />
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">
@@ -16,38 +16,39 @@
             @click="newModal"
             class="btn btn-info float-right"
           >
-            <i class="fas fa-plus"></i> Thêm phòng ban
+            <i class="fas fa-plus"></i> Thêm đề xuất
           </button>
         </div>
       </div>
       <!-- /.card -->
-      <add-costcenter :costcenter="costcenter" />
+      <order-modal :order="order" />
     </section>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import CostcentersTodo from "@/components/Costcenters/CostcentersTodo.vue";
-import AddCostcenter from "@/components/Costcenters/Modals/AddCostcenter.vue";
+import OrdersTodo from "@/components/Orders/OrdersTodo.vue";
+import OrderModal from "@/components/Orders/Modals/OrderModal.vue";
 export default {
-  name: "Costcenters",
+  name: "Orders",
   components: {
-    CostcentersTodo,
-    AddCostcenter
+    OrdersTodo,
+    OrderModal
   },
   computed: {
-    ...mapGetters("costcenters", ["costcenters", "costcenter"])
+    ...mapGetters("orders", ["orders", "order"])
   },
   methods: {
-    ...mapActions("costcenters", ["resetCostcenter", "getAllCostcenters"]),
+    ...mapActions("orders", ["resetOrder", "getAllOrders"]),
     newModal() {
-      this.resetCostcenter();
+      this.resetOrder();
       // eslint-disable-next-line no-undef
-      $("#costcenter-modal").modal("show");
+      $("#order-modal").modal("show");
     }
   },
   created() {
-    this.getAllCostcenters();
+    this.resetOrder();
+    this.getAllOrders();
   }
 };
 </script>

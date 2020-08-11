@@ -6,12 +6,16 @@ function validateUser(orderLine) {
     id: Joi.string().required(),
     userId: Joi.string().required(),
     costcenterId: Joi.string().required(),
+    orderId: Joi.string().required(),
     companyId: Joi.string().required(),
     unitId: Joi.string().required(),
     code: Joi.string().required(),
     name: Joi.string().required(),
+    title: Joi.string().required(),
     quantity: Joi.number().required(),
     note: Joi.string().required(),
+    startedAt: Joi.date().required(),
+    finishedAt: Joi.date().required(),
     status: Joi.string().required()
   });
   return schema.validate(orderLine);
@@ -53,7 +57,7 @@ module.exports = {
     }
 
     try {
-      let orderLine = await orderLine.create(value, {
+      let orderLine = await OrderLine.create(value, {
         include: []
       });
       result.data = orderLine;
@@ -99,18 +103,22 @@ module.exports = {
     }
 
     try {
-      let orderLine = await orderLine.findByPk(req.params.id);
+      let orderLine = await OrderLine.findByPk(req.params.id);
       if (orderLine == null) {
         status = 400;
       } else {
         orderLine.userId = value.userId;
+        orderLine.orderId = value.orderId;
         orderLine.costcenterId = value.costcenterId;
         orderLine.companyId = value.companyId;
         orderLine.unitId = value.unitId;
         orderLine.code = value.code;
         orderLine.name = value.name;
+        orderLine.title = value.title;
         orderLine.quantity = value.quantity;
         orderLine.note = value.note;
+        orderLine.startedAt = value.startedAt;
+        orderLine.finishedAt = value.finishedAt;
         orderLine.status = value.status;
         result.data = await orderLine.save();
       }

@@ -3,8 +3,8 @@
     <section class="content">
       <div class="row">
         <div class="col-md-6"><order-form :order="order" /></div>
-        <div class="col-md-6">
-          <order-lines-todo :orderLines="orderLines" />
+        <div v-show="order.id" class="col-md-6">
+          <order-lines-todo :orderLines="orderLines.data" />
           <order-line-form :orderLine="orderLine" />
         </div>
       </div>
@@ -40,12 +40,14 @@ export default {
     ...mapGetters("orderLines", ["orderLines", "orderLine"])
   },
   methods: {
-    ...mapActions("orders", ["resetOrder"]),
-    ...mapActions("orderLines", ["resetOrderLine"])
+    ...mapActions("orders", ["resetOrder", "getAllOrders"]),
+    ...mapActions("orderLines", ["resetOrderLine", "getAllOrderLines"])
   },
   created() {
     this.resetOrder();
     this.resetOrderLine();
+    this.getAllOrderLines();
+    this.getAllOrders();
   }
 };
 </script>

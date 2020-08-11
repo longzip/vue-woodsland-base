@@ -5,14 +5,15 @@ export default {
   post: async (url, payload) => {
     let result = {};
     if (navigator.onLine) {
-      Object.keys(payload).forEach(
-        key =>
-          (payload[key] === null ||
-            payload[key] === undefined ||
-            payload[key] === "") &&
-          delete payload[key]
-      );
       let storeCostcenter = { ...payload };
+      delete storeCostcenter.createdAt;
+      delete storeCostcenter.updatedAt;
+      Object.keys(storeCostcenter).forEach(
+        key =>
+          (storeCostcenter[key] === null ||
+            storeCostcenter[key] === undefined) &&
+          delete storeCostcenter[key]
+      );
       try {
         result = await axios.post(url, storeCostcenter);
         swal.fire({

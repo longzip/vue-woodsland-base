@@ -74,11 +74,14 @@
     </div>
     <!-- /.card-body -->
     <div class="card-footer clearfix">
-      <button @click="taoMatHang()" class="btn btn-sm btn-secondary float-left">
+      <button
+        @click="resetOrderLine"
+        class="btn btn-sm btn-secondary float-left"
+      >
         Xóa
       </button>
       <button
-        @click="themMatHang(orderLine)"
+        @click="addorderLine(orderLine)"
         class="btn btn-sm btn-primary float-right"
       >
         Thêm mặt hàng
@@ -96,11 +99,12 @@ export default {
     UnitSelect
   },
   methods: {
-    ...mapActions("orders", ["addorder"]),
+    ...mapActions("orderLines", ["addorderLine", "resetOrderLine"]),
     ...mapActions("units", ["getAllUnits"])
   },
-  created(){
+  created() {
     this.getAllUnits();
+    this.resetOrderLine();
   }
 };
 </script>

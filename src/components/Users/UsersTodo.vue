@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     ...mapActions("users", ["deleteUser", "selectUser"]),
-    ...mapActions("costcenters", ["getAll"]),
+    ...mapActions("costcenters", ["getAllCostcenters"]),
     showModals(user) {
       this.selectUser(user);
       // eslint-disable-next-line no-undef
@@ -69,7 +69,7 @@ export default {
       });
     },
     getNameCostcenter(id) {
-      if (this.costcenters) {
+      if (this.costcenters.data) {
         let found = this.costcenters.data.find(element => element.id === id);
         if (found) {
           return found.name;
@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    this.getAll();
+    this.getAllCostcenters();
   }
 };
 </script>

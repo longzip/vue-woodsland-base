@@ -1,9 +1,9 @@
 <template>
-  <div class="modal fade" id="costcenter-modal">
+  <div class="modal fade" id="order-modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Phòng ban</h4>
+          <h4 class="modal-title">Đề xuất</h4>
           <button
             type="button"
             class="close"
@@ -13,27 +13,43 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form @submit.prevent="confirmSaveCostcenter">
+        <form @submit.prevent="confirmSaveOrder">
           <div class="modal-body">
             <div class="form-group">
-              <label for="ma-phong" class="col-form-label">Mã phòng:</label>
+              <label for="inputName">Số phiếu</label>
               <input
                 type="text"
-                v-model="costcenter.code"
+                id="inputName"
+                v-model="order.code"
                 class="form-control"
-                id="ma-phong"
               />
             </div>
             <div class="form-group">
-              <label for="ten-phong" class="col-form-label">Tên phòng:</label>
-              <input
-                type="text"
-                v-model="costcenter.name"
+              <label for="inputDescription">Nội dung</label>
+              <textarea
+                id="inputDescription"
                 class="form-control"
-                id="ten-phong"
-              />
+                v-model="order.note"
+                rows="4"
+              ></textarea>
             </div>
-            <user-select :item="costcenter" />
+            <div class="form-group">
+              <label for="inputStatus">Trạng thái</label>
+              <select v-model="order.status" class="form-control custom-select">
+                <option selected="" disabled="">Chọn một</option>
+                <option>Tạm dừng</option>
+                <option>Hủy</option>
+                <option>Hoàn thành</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="inputClientCompany">Ban giám đốc</label>
+              <input type="text" id="inputClientCompany" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="inputProjectLeader">Trưởng bộ phận</label>
+              <input type="text" id="inputProjectLeader" class="form-control" />
+            </div>
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -53,30 +69,18 @@
 </template>
 
 <script>
-import UserSelect from "@/components/Shared/UserSelect.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
-  props: ["costcenter"],
-  components: {
-    UserSelect
-  },
-  computed: {
-    ...mapGetters("costcenters", ["successStatus"])
-  },
+  props: ["order"],
+
   methods: {
-    ...mapActions("costcenters", ["addCostcenter"]),
-    ...mapActions("users", ["getAll"]),
-    confirmSaveCostcenter() {
-      this.addCostcenter(this.costcenter);
-      if (this.successStatus) {
-        // eslint-disable-next-line no-undef
-        $("#costcenter-modal").modal("hide");
-      }
+    ...mapActions("orders", ["addOrder"]),
+    confirmSaveOrder() {
+      this.addOrder(this.order);
+      // eslint-disable-next-line no-undef
+      $("#order-modal").modal("hide");
     }
-  },
-  created() {
-    this.getAll();
   }
 };
 </script>

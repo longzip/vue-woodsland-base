@@ -3,31 +3,22 @@
     <tbody>
       <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>User Name</th>
+        <th>Họ tên</th>
+        <th>Mã NV</th>
         <th>Vai trò</th>
         <th>Showroom</th>
         <th>Cập nhật</th>
         <th>Sửa/Xóa</th>
       </tr>
-      <tr v-for="user in users" :key="user.id">
-        <td>{{ user.id }}</td>
+      <tr v-for="(user, index) in users" :key="user.id">
+        <td>{{ index + 1 }}</td>
         <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
         <td>{{ user.username }}</td>
+        <td>{{ user.role }}</td>
         <td>
-          <span
-            v-for="role in users.roles"
-            class="badge badge-info"
-            :key="role.id"
-            >{{ role }}</span
-          >
+          {{ getNameCostcenter(user.costcenterId) }}
         </td>
-        <td>
-          {{ user.costcenter }}
-        </td>
-        <td>{{ user.updatedAt }}</td>
+        <td>{{ user.updatedAt | ngay }}</td>
         <td class="text-right py-0 align-middle">
           <div class="btn-group btn-group-sm">
             <button @click="showModals(user)" class="btn btn-info">
@@ -44,11 +35,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["users"],
+  computed: {
+    ...mapGetters("costcenters", ["costcenters"])
+  },
   methods: {
     ...mapActions("users", ["deleteUser", "selectUser"]),
+    ...mapActions("costcenters", ["getAll"]),
     showModals(user) {
       this.selectUser(user);
       // eslint-disable-next-line no-undef
@@ -72,7 +67,19 @@ export default {
           Swal.fire("Đã xóa!", "Yêu cầu của bạn đã được thực hiện.", "success");
         }
       });
+    },
+    getNameCostcenter(id) {
+      if (this.costcenters) {
+        let found = this.costcenters.data.find(element => element.id === id);
+        if (found) {
+          return found.name;
+        }
+      }
+      return "";
     }
+  },
+  created() {
+    this.getAll();
   }
 };
 </script>

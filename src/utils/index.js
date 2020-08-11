@@ -5,6 +5,13 @@ export default {
   post: async (url, payload) => {
     let result = {};
     if (navigator.onLine) {
+      Object.keys(payload).forEach(
+        key =>
+          (payload[key] === null ||
+            payload[key] === undefined ||
+            payload[key] === "") &&
+          delete payload[key]
+      );
       let storeCostcenter = { ...payload };
       try {
         result = await axios.post(url, storeCostcenter);
@@ -80,11 +87,16 @@ export default {
   put: async (url, payload) => {
     let result = {};
     if (navigator.onLine) {
-      let updateCostcenter = { ...payload };
-      delete updateCostcenter.createdAt;
-      delete updateCostcenter.updatedAt;
+      let updateItem = { ...payload };
+      delete updateItem.createdAt;
+      delete updateItem.updatedAt;
+      Object.keys(updateItem).forEach(
+        key =>
+          (updateItem[key] === null || updateItem[key] === undefined) &&
+          delete updateItem[key]
+      );
       try {
-        result = await axios.put(url + payload.id, updateCostcenter);
+        result = await axios.put(url, updateItem);
         swal.fire({
           position: "top-end",
           icon: "success",

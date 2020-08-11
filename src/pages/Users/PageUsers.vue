@@ -7,7 +7,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
-          <users-todo :users="users" />
+          <users-todo :users="users.data" />
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">
@@ -39,12 +39,15 @@ export default {
     ...mapGetters("users", ["users", "user"])
   },
   methods: {
-    ...mapActions("users", ["resetUser"]),
+    ...mapActions("users", ["resetUser", "getAll"]),
     showModal() {
       this.resetUser();
       // eslint-disable-next-line no-undef
       $("#user-modal").modal("show");
     }
+  },
+  created() {
+    this.getAll();
   }
 };
 </script>

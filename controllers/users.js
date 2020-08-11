@@ -7,16 +7,15 @@ const stage = 10;
 function validateUser(user) {
   const schema = Joi.object({
     id: Joi.string().required(),
-    costcenter: Joi.string().required(),
+    userId: Joi.string().required(),
+    costcenterId: Joi.string().required(),
     name: Joi.string(),
     username: Joi.string()
       .alphanum()
       .min(3)
       .max(30)
       .required(),
-    password: Joi.string()
-      .regex(/^[a-zA-Z0-9]{3,30}$/)
-      .required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
     role: Joi.string().required(),
     avatar: Joi.string().required(),
     email: Joi.string().email({ minDomainSegments: 2 })
@@ -74,7 +73,7 @@ module.exports = {
     }
 
     try {
-      const hash = await bcrypt.hashSync(value.password, stage.saltingRounds);
+      const hash = bcrypt.hashSync(value.password, stage);
       value.password = hash;
       let user = await User.create(value);
       result.data = user;
@@ -108,9 +107,10 @@ module.exports = {
   },
 
   update: async (req, res) => {
+    let { id } = req.params;
+    console.log(id);
     let result = {};
     let status = 201;
-
     let { error, value } = validateUser(req.body);
     if (error) {
       status = 500;
@@ -119,18 +119,25 @@ module.exports = {
       return res.status(status).send(result);
     }
     try {
-      if (value.password)
-        value.password = await bcrypt.hashSync(
-          value.password,
-          stage.saltingRounds
-        );
-      else delete value.password;
-
-      let affectedRows = await User.update(value, {
-        where: {
-          id: req.params.id
+      let user = await User.findByPk(id);
+      if (user === null) {
+        status = 400;
+      } else {
+        user.userId = value.userId;
+        user.costcenterId = value.costcenterId;
+        user.name = value.name;
+        user.username = value.username;
+        user.role = value.role;
+        user.avatar = value.avatar;
+        user.email = value.email;
+        if (value.password) {
+          console.log("Doi mat khau");
+          user.password = bcrypt.hashSync(value.password, stage);
         }
-      });
+      }
+      console.log(user);
+      let affectedRows = await user.save();
+      console.log(affectedRows);
       result.data = affectedRows;
     } catch (error) {
       console.log(error);
@@ -145,7 +152,9 @@ module.exports = {
     let status = 200;
 
     try {
-      let users = await User.findAll();
+      let users = await User.findAll({
+        attributes: { exclude: ["password"] }
+      });
       result.data = users;
     } catch (error) {
       console.log(error);

@@ -18,64 +18,51 @@
         <form @submit.prevent="confirmSave">
           <div class="modal-body">
             <div class="form-group">
+              <label for="ho-ten" class="col-form-label">Họ tên:</label>
               <input
                 v-model="user.name"
                 type="text"
                 name="name"
                 placeholder="Họ và tên"
                 class="form-control"
+                id="ho-ten"
               />
             </div>
             <div class="form-group">
+              <label for="email" class="col-form-label">Email:</label>
               <input
                 v-model="user.email"
                 type="email"
                 name="email"
                 placeholder="Email"
                 class="form-control"
+                id="email"
               />
             </div>
             <div class="form-group">
+              <label for="ma-nhan-vien" class="col-form-label"
+                >Mã nhân viên:</label
+              >
               <input
                 v-model="user.username"
                 type="text"
                 name="username"
                 placeholder="Mã số nhân viên"
                 class="form-control"
+                id="ma-nhan-vien"
               />
             </div>
             <costcenter-select :item="user" />
-            <!-- <div class="form-group">
-              <label>Vai trò</label>
-              <multiselect
-                v-model="user.roles"
-                tag-placeholder="Thêm vai trò"
-                placeholder="Tìm hoặc chọn"
-                :options="roles"
-                :multiple="true"
-                :taggable="true"
-              ></multiselect>
-            </div> -->
-            <!-- <div>
-              <label>Thuộc Showroom</label>
-              <multiselect
-                v-model="user.costcenters"
-                tag-placeholder=""
-                placeholder="Tìm showroom"
-                label="name"
-                track-by="id"
-                :options="costcenters"
-                :multiple="true"
-                :taggable="true"
-              ></multiselect>
-            </div> -->
+            <user-select :item="user" />
             <div class="form-group">
+              <label for="password" class="col-form-label">Mật khẩu:</label>
               <input
                 v-model="user.password"
                 type="password"
                 name="password"
                 placeholder="Mật khẩu"
                 class="form-control"
+                id="password"
               />
             </div>
           </div>
@@ -96,10 +83,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import CostcenterSelect from "@/components/Shared/CostcenterSelect.vue";
+import UserSelect from "@/components/Shared/UserSelect.vue";
 export default {
   props: ["user"],
   components: {
-    CostcenterSelect
+    CostcenterSelect,
+    UserSelect
   },
   computed: {
     ...mapGetters("users", ["successStatus"])
@@ -108,10 +97,8 @@ export default {
     ...mapActions("users", ["addUser"]),
     confirmSave() {
       this.addUser(this.user);
-      if (this.successStatus) {
-        // eslint-disable-next-line no-undef
-        $("#user-modal").modal("hide");
-      }
+      // eslint-disable-next-line no-undef
+      $("#user-modal").modal("hide");
     }
   }
 };

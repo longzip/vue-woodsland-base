@@ -1,4 +1,3 @@
-import Vue from "vue";
 import { v4 as uuidv4 } from "uuid";
 import client from "../utils";
 
@@ -14,21 +13,13 @@ const state = {
   costcenter,
   loading: false,
   successStatus: true,
-  costcenters: []
+  costcenters: {}
 };
 
 const mutations = {
-  updateTask(state, payload) {
-    Object.assign(state.tasks[payload.id], payload.updates);
-  },
-
   deleteCostcenter(state, id) {
-    let index = state.costcenters.findIndex(item => item.id === id);
-    state.costcenters.splice(index, 1);
-  },
-
-  addTask(state, payload) {
-    Vue.set(state.tasks, payload.id, payload.task);
+    let index = state.costcenters.data.findIndex(item => item.id === id);
+    state.costcenters.data.splice(index, 1);
   },
 
   selectCostcenter(state, payload) {
@@ -40,25 +31,22 @@ const mutations = {
   },
 
   addCostcenter(state, payload) {
-    state.costcenters.push(payload);
-    console.log("Thêm thành công");
-    console.log(payload);
+    state.costcenters.data.push(payload);
   },
 
   saveCostcenter: async (state, payload) => {
-    let costcenter = await client.put("/api/v1/costcenters/", payload);
+    let costcenter = await client.put(
+      "/api/v1/costcenters/" + payload.id,
+      payload
+    );
     if (costcenter) payload = costcenter.data;
   },
 
   setSuccess(state, payload) {
-    console.log("Set success");
-    console.log(payload);
     state.successStatus = payload;
   },
 
   setCostcenters(state, payload) {
-    console.log("set costcenters");
-    console.log(payload);
     state.costcenters = payload;
   }
 };
@@ -81,30 +69,44 @@ const actions = {
     commit("deleteCostcenter", id);
   },
 
-  addCostcenter({ commit }, costcenter) {
-    if (costcenter && costcenter.code && costcenter.name) {
-      if (costcenter.id) commit("saveCostcenter", costcenter);
-      else {
-        costcenter.id = uuidv4();
-        commit("addCostcenter", costcenter);
-      }
-      commit("setSuccess", true);
-    } else commit("setSuccess", false);
+  addCostcenter: async ({ commit }, costcenter) => {
+    if (costcenter.id) {
+      let data = await client.put(
+        "/api/v1/costcenters/" + costcenter.id,
+        costcenter
+      );
+      if (data) costcenter = data.data;
+    } else {
+      let data = await client.post("/api/v1/costcenters/", {
+        ...costcenter,
+        id: uuidv4()
+      });
+      console.log(data);
+      if (data) commit("addcostcenter", data.data);
+    }
   },
 
-  saveCostcenter({ commit }, costcenter) {
-    if (costcenter && costcenter.code && costcenter.name) {
-      commit("saveCostcenter", costcenter);
-      commit("setSuccess", true);
+  saveCostcenter: async ({ commit }, costcenter) => {
+    if (costcenter.id) {
+      let data = await client.put(
+        "/api/v1/costcenters/" + costcenter.id,
+        costcenter
+      );
+      if (data) costcenter = data.data;
     } else {
-      commit("setSuccess", false);
+      let data = await client.post("/api/v1/costcenters/", {
+        ...costcenter,
+        id: uuidv4()
+      });
+      console.log(data);
+      if (data) commit("addcostcenter", data.data);
     }
   }
 };
 
 const getters = {
   costcenters: state => {
-    return state.costcenters.data;
+    return state.costcenters;
   },
   costcenter: state => {
     return state.costcenter;

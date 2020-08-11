@@ -1,16 +1,16 @@
 <template>
   <div class="form-group">
-    <label>Phòng ban</label>
-    <select class="form-control" v-model="item.costcenterId">
+    <label>Quản lý trực tiếp</label>
+    <select class="form-control" v-model="item.userId">
       <option selected disabled>Chọn một</option>
       <option
-        v-for="option in costcenters.data"
+        v-for="option in users.data"
         v-bind:value="option.id"
         :key="option.id"
-        >{{ option.name }}</option
+        >@{{ option.username }} [{{ option.name }}]</option
       >
     </select>
-    <span>Selected: {{ item.costcenterId }}</span>
+    <span>Selected: {{ item.userId }}</span>
   </div>
 </template>
 
@@ -21,7 +21,9 @@ export default {
   props: ["item"],
 
   computed: {
-    ...mapGetters("costcenters", ["costcenters"])
+    ...mapGetters("users", ["users"])
   }
 };
 </script>
+
+<style lang="scss" scoped></style>

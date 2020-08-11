@@ -1,16 +1,16 @@
 <template>
   <div class="form-group">
-    <label>Phòng ban</label>
-    <select class="form-control" v-model="item.costcenterId">
+    <label>Đợn vị tính</label>
+    <select class="form-control" v-model="item.unitId">
       <option selected disabled>Chọn một</option>
       <option
-        v-for="option in costcenters.data"
+        v-for="option in units.data"
         v-bind:value="option.id"
         :key="option.id"
         >{{ option.name }}</option
       >
     </select>
-    <span>Selected: {{ item.costcenterId }}</span>
+    <span>Selected: {{ item.unitId }}</span>
   </div>
 </template>
 
@@ -21,7 +21,9 @@ export default {
   props: ["item"],
 
   computed: {
-    ...mapGetters("costcenters", ["costcenters"])
+    ...mapGetters("units", ["units"])
   }
 };
 </script>
+
+<style lang="scss" scoped></style>

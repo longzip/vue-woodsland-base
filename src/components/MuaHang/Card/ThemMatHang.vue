@@ -34,15 +34,7 @@
           class="form-control"
         />
       </div>
-      <div class="form-group">
-        <label for="inputDonViTinh">Đơn vị tính</label>
-        <input
-          type="text"
-          v-model="mathang.donViTinh"
-          id="inputDonViTinh"
-          class="form-control"
-        />
-      </div>
+      <unit-select :item="mathang" />
       <div class="form-group">
         <label for="inputSoLuong">Số lượng</label>
         <input
@@ -96,13 +88,21 @@
 </template>
 
 <script>
+import UnitSelect from "@/components/Shared/UnitSelect.vue";
 import { mapActions } from "vuex";
 export default {
   props: {
     mathang: {}
   },
+  components: {
+    UnitSelect
+  },
   methods: {
-    ...mapActions("muahangs", ["themMatHang", "taoMatHang"])
+    ...mapActions("muahangs", ["themMatHang", "taoMatHang"]),
+    ...mapActions("units", ["getAllUnits"])
+  },
+  created(){
+    this.getAllUnits();
   }
 };
 </script>

@@ -7,7 +7,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
-          <costcenters-todo :costcenters="costcenters" />
+          <costcenters-todo :costcenters="costcenters.data" />
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">

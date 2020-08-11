@@ -33,6 +33,7 @@
                 id="ten-phong"
               />
             </div>
+            <user-select :item="costcenter" />
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -52,15 +53,20 @@
 </template>
 
 <script>
+import UserSelect from "@/components/Shared/UserSelect.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   props: ["costcenter"],
+  components: {
+    UserSelect
+  },
   computed: {
     ...mapGetters("costcenters", ["successStatus"])
   },
   methods: {
     ...mapActions("costcenters", ["addCostcenter"]),
+    ...mapActions("users", ["getAll"]),
     confirmSaveCostcenter() {
       this.addCostcenter(this.costcenter);
       if (this.successStatus) {
@@ -68,6 +74,9 @@ export default {
         $("#costcenter-modal").modal("hide");
       }
     }
+  },
+  created() {
+    this.getAll();
   }
 };
 </script>

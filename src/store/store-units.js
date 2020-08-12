@@ -38,7 +38,7 @@ const actions = {
     commit("deleteUnit", id);
   },
 
-  addunit: async ({ commit }, unit) => {
+  addUnit: async ({ commit }, unit) => {
     if (unit.id) {
       let data = await client.put("/api/v1/units/" + unit.id, unit);
       if (data) unit = data.data;
@@ -46,7 +46,7 @@ const actions = {
       console.log(unit);
       let data = await client.post("/api/v1/units/", { ...unit, id: uuidv4() });
       console.log(data);
-      if (data) commit("addunit", data.data);
+      if (data) commit("addUnit", data.data);
     }
   },
   getAllUnits: async ({ commit }) => {

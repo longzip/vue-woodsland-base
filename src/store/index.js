@@ -9,6 +9,7 @@ import costcenters from "./store-costcenters";
 import approves from "./store-approves";
 import orders from "./store-orders";
 import orderLines from "./store-orderLines";
+import requests from "./store-requests";
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     companies,
     costcenters,
     orders,
+    requests,
     orderLines,
     approves,
     muahangs

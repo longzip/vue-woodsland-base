@@ -135,9 +135,7 @@ module.exports = {
           user.password = bcrypt.hashSync(value.password, stage);
         }
       }
-      console.log(user);
       let affectedRows = await user.save();
-      console.log(affectedRows);
       result.data = affectedRows;
     } catch (error) {
       console.log(error);

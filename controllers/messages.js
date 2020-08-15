@@ -1,24 +1,16 @@
 const {
-  Order,
-  OrderLine,
-  Request,
+  Message,
   data
 } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
 
-function validateUser(order) {
+function validateMessage(value) {
   const schema = Joi.object({
     id: Joi.string().required(),
-    userId: Joi.string().required(),
-    costcenterId: Joi.string().required(),
-    companyId: Joi.string().required(),
     code: Joi.string().required(),
-    name: Joi.string().required(),
-    note: Joi.string().required(),
-    status: Joi.string().required(),
-    completed: Joi.boolean().required()
+    name: Joi.string().required()
   });
-  return schema.validate(order);
+  return schema.validate(value);
 }
 
 module.exports = {
@@ -27,11 +19,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order === null) {
+      let message = await Message.findByPk(req.params.id);
+      if (message === null) {
         status = 400;
       } else {
-        let affectedRows = await order.destroy();
+        let affectedRows = await message.destroy();
         result.data = affectedRows;
       }
     } catch (error) {
@@ -50,7 +42,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateMessage(req.body);
 
     if (error) {
       status = 500;
@@ -60,10 +52,10 @@ module.exports = {
     }
 
     try {
-      let order = await Order.create(value, {
+      let message = await Message.create(value, {
         include: []
       });
-      result.data = order;
+      result.data = message;
     } catch (error) {
       status = 500;
       console.log(error);
@@ -74,23 +66,15 @@ module.exports = {
   },
 
   show: async (req, res) => {
-    let {
-      id
-    } = req.params;
     let result = {};
     let status = 200;
 
     try {
-      let order = await Order.findOne({
-        where: {
-          id
-        },
-        include: [OrderLine, Request]
-      });
-      if (order == null) {
+      let message = await Message.findByPk(req.params.id);
+      if (message == null) {
         status = 400;
       } else {
-        result.data = order;
+        result.data = message;
       }
     } catch (error) {
       console.log(error);
@@ -108,7 +92,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateMessage(req.body);
     if (error) {
       status = 500;
       console.log(error);
@@ -117,20 +101,12 @@ module.exports = {
     }
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order == null) {
-        status = 400;
-      } else {
-        order.userId = value.userId;
-        order.costcenterId = value.costcenterId;
-        order.companyId = value.companyId;
-        order.code = value.code;
-        order.name = value.name;
-        order.completed = value.completed;
-        order.note = value.note;
-        order.status = value.status;
-        result.data = await order.save();
-      }
+      let affectedRows = await Message.update(value, {
+        where: {
+          id: req.params.id
+        }
+      });
+      result.data = affectedRows;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -144,8 +120,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let orders = await Order.findAll();
-      result.data = orders;
+      let messages = await Message.findAll();
+      result.data = messages;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -158,8 +134,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let orders = await Order.bulkCreate(req.body);
-      result.data = orders;
+      let messages = await Message.bulkCreate(req.body);
+      result.data = messages;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -170,7 +146,7 @@ module.exports = {
   backup: async (req, res) => {
     let result = {};
     let status = 200;
-    result.data = await data.orders;
+    result.data = await data.messages;
     return res.status(status).send(result);
   }
 };

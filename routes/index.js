@@ -5,6 +5,7 @@ const orderLines = require("./orderLines");
 const muaHangs = require("./muaHangs");
 const costcenters = require("./costcenters");
 const requests = require("./requests");
+const messages = require("./messages");
 
 module.exports = router => {
   orderLines(router);
@@ -12,6 +13,7 @@ module.exports = router => {
   units(router);
   users(router);
   muaHangs(router);
+  messages(router);
   requests(router);
   costcenters(router);
   return router;

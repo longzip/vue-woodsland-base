@@ -59,9 +59,15 @@ const actions = {
       if (data) commit("addOrder", data.data);
     }
   },
+  
   getAllOrders: async ({ commit }) => {
     let data = await client.get("/api/v1/orders/");
     if (data) commit("setOrders", data.data);
+  },
+
+  getOneOrder: async ({ commit }, id) => {
+    let data = await client.get("/api/v1/orders/" + id);
+    if (data) commit("selectOrder", data.data);
   },
 
   resetOrder({ commit }) {

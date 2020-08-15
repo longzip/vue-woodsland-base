@@ -7,8 +7,10 @@ const Joi = require("@hapi/joi");
 function validateMessage(value) {
   const schema = Joi.object({
     id: Joi.string().required(),
-    code: Joi.string().required(),
-    name: Joi.string().required()
+    userId: Joi.string().required(),
+    orderableId: Joi.string().required(),
+    orderableType: Joi.string().required(),
+    text: Joi.string().required()
   });
   return schema.validate(value);
 }

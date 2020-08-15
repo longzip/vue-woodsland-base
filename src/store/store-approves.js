@@ -184,12 +184,12 @@ const mutations = {
 const actions = {
   notApproved({ commit }, payload) {
     console.log("notApproved");
-    payload.status = "Hủy"
+    payload.status = "Hủy";
     commit("updateApprove", payload);
   },
   approved({ commit }, payload) {
     console.log("approved");
-    payload.status = "Phê duyệt"
+    payload.status = "Phê duyệt";
     commit("updateApprove", payload);
   }
 };

@@ -59,7 +59,7 @@ const actions = {
       if (data) commit("addOrder", data.data);
     }
   },
-  
+
   getAllOrders: async ({ commit }) => {
     let data = await client.get("/api/v1/orders/");
     if (data) commit("setOrders", data.data);

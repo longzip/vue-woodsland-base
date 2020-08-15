@@ -1,4 +1,7 @@
-const { OrderLine, data } = require("wms-sequelize");
+const {
+  OrderLine,
+  data
+} = require("wms-sequelize");
 const Joi = require("@hapi/joi");
 
 function validateUser(orderLine) {
@@ -13,7 +16,8 @@ function validateUser(orderLine) {
     name: Joi.string().required(),
     title: Joi.string().required(),
     quantity: Joi.number().required(),
-    note: Joi.string().required(),
+    note: Joi.string(),
+    origin: Joi.string(),
     startedAt: Joi.date().required(),
     finishedAt: Joi.date().required(),
     status: Joi.string().required()
@@ -47,7 +51,10 @@ module.exports = {
     let result = {};
     let status = 201;
 
-    let { error, value } = validateUser(req.body);
+    let {
+      error,
+      value
+    } = validateUser(req.body);
 
     if (error) {
       status = 500;
@@ -94,7 +101,10 @@ module.exports = {
     let result = {};
     let status = 201;
 
-    let { error, value } = validateUser(req.body);
+    let {
+      error,
+      value
+    } = validateUser(req.body);
     if (error) {
       status = 500;
       console.log(error);

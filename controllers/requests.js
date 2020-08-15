@@ -15,6 +15,9 @@ function validateRequest(value) {
     companyId: Joi.string().required(),
     title: Joi.string().required(),
     status: Joi.string(),
+    position: Joi.string(),
+    name: Joi.string(),
+    showMessages: Joi.boolean(),
     completed: Joi.boolean().required()
   });
   return schema.validate(value);
@@ -176,9 +179,9 @@ module.exports = {
 
     try {
       let requests = await Request.findAll({
-        // where: {
-        //   completed: false
-        // }
+        where: {
+          completed: false
+        }
       });
       result.data = requests;
     } catch (error) {

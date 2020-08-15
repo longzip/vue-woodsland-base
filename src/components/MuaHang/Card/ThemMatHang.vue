@@ -101,7 +101,7 @@ export default {
     ...mapActions("muahangs", ["themMatHang", "taoMatHang"]),
     ...mapActions("units", ["getAllUnits"])
   },
-  created(){
+  created() {
     this.getAllUnits();
   }
 };

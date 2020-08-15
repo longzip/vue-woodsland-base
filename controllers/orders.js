@@ -2,6 +2,7 @@ const {
   Order,
   OrderLine,
   Request,
+  Message,
   data
 } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
@@ -16,6 +17,7 @@ function validateUser(order) {
     name: Joi.string().required(),
     note: Joi.string().required(),
     status: Joi.string().required(),
+    signature: Joi.string().required(),
     completed: Joi.boolean().required()
   });
   return schema.validate(order);
@@ -85,7 +87,7 @@ module.exports = {
         where: {
           id
         },
-        include: [OrderLine, Request]
+        include: [OrderLine, Request, Message]
       });
       if (order == null) {
         status = 400;
@@ -144,7 +146,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let orders = await Order.findAll();
+      let orders = await Order.findAll({
+        where: {
+          completed: false
+        }
+      });
       result.data = orders;
     } catch (error) {
       console.log(error);

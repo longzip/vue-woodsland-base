@@ -9,6 +9,7 @@ function validateRequest(value) {
   const schema = Joi.object({
     id: Joi.string().required(),
     userId: Joi.string().required(),
+    nextId: Joi.string(),
     orderableId: Joi.string().required(),
     orderableType: Joi.string().required(),
     costcenterId: Joi.string().required(),

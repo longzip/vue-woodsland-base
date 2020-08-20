@@ -1,27 +1,23 @@
 const {
-  Order,
-  OrderMeta,
-  Request,
-  Message,
+  ProposalForm,
   data
 } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
 
-function validateUser(order) {
+function validateProposalForm(value) {
   const schema = Joi.object({
     id: Joi.string().required(),
     userId: Joi.string().required(),
-    costcenterId: Joi.string().required(),
-    approvalId: Joi.string().required(),
-    companyId: Joi.string().required(),
-    code: Joi.string().required(),
-    name: Joi.string().required(),
-    note: Joi.string().required(),
+    approvalableId: Joi.string(),
+    approvalableType: Joi.string(),
+    costcenterId: Joi.string(),
+    companyId: Joi.string(),
+    title: Joi.string().required(),
     status: Joi.string().required(),
-    signature: Joi.string().required(),
-    completed: Joi.boolean().required()
+    isDisable: Joi.boolean().required(),
+    showMessages: Joi.boolean().required()
   });
-  return schema.validate(order);
+  return schema.validate(value);
 }
 
 module.exports = {
@@ -30,11 +26,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order === null) {
+      let proposalForm = await ProposalForm.findByPk(req.params.id);
+      if (proposalForm === null) {
         status = 400;
       } else {
-        let affectedRows = await order.destroy();
+        let affectedRows = await proposalForm.destroy();
         result.data = affectedRows;
       }
     } catch (error) {
@@ -53,7 +49,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateProposalForm(req.body);
 
     if (error) {
       status = 500;
@@ -63,10 +59,10 @@ module.exports = {
     }
 
     try {
-      let order = await Order.create(value, {
+      let proposalForm = await ProposalForm.create(value, {
         include: []
       });
-      result.data = order;
+      result.data = proposalForm;
     } catch (error) {
       status = 500;
       console.log(error);
@@ -77,23 +73,15 @@ module.exports = {
   },
 
   show: async (req, res) => {
-    let {
-      id
-    } = req.params;
     let result = {};
     let status = 200;
 
     try {
-      let order = await Order.findOne({
-        where: {
-          id
-        },
-        include: [OrderMeta, Request, Message]
-      });
-      if (order == null) {
+      let proposalForm = await ProposalForm.findByPk(req.params.id);
+      if (proposalForm == null) {
         status = 400;
       } else {
-        result.data = order;
+        result.data = proposalForm;
       }
     } catch (error) {
       console.log(error);
@@ -111,7 +99,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateProposalForm(req.body);
     if (error) {
       status = 500;
       console.log(error);
@@ -120,20 +108,12 @@ module.exports = {
     }
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order == null) {
-        status = 400;
-      } else {
-        order.userId = value.userId;
-        order.costcenterId = value.costcenterId;
-        order.companyId = value.companyId;
-        order.code = value.code;
-        order.name = value.name;
-        order.completed = value.completed;
-        order.note = value.note;
-        order.status = value.status;
-        result.data = await order.save();
-      }
+      let affectedRows = await ProposalForm.update(value, {
+        where: {
+          id: req.params.id
+        }
+      });
+      result.data = affectedRows;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -145,17 +125,13 @@ module.exports = {
   getAll: async (req, res) => {
     let result = {};
     let status = 200;
-    let {
-      userId
-    } = req.query;
-    // console.log(userId)
     try {
-      let orders = await Order.findAll({
-        where: {
-          userId
-        }
+      let proposalForms = await ProposalForm.findAll({
+        // order: [
+        //   ["sequence", 'DESC']
+        // ]
       });
-      result.data = orders;
+      result.data = proposalForms;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -168,8 +144,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let orders = await Order.bulkCreate(req.body);
-      result.data = orders;
+      let proposalForms = await ProposalForm.bulkCreate(req.body);
+      result.data = proposalForms;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -180,7 +156,7 @@ module.exports = {
   backup: async (req, res) => {
     let result = {};
     let status = 200;
-    result.data = await data.orders;
+    result.data = await data.proposalForms;
     return res.status(status).send(result);
   }
 };

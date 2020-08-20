@@ -1,27 +1,21 @@
 const {
-  Order,
-  OrderMeta,
-  Request,
-  Message,
+  ApprovalStep,
   data
 } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
 
-function validateUser(order) {
+function validateApprovalStep(value) {
   const schema = Joi.object({
     id: Joi.string().required(),
     userId: Joi.string().required(),
-    costcenterId: Joi.string().required(),
-    approvalId: Joi.string().required(),
-    companyId: Joi.string().required(),
-    code: Joi.string().required(),
+    approvalableId: Joi.string(),
+    approvalableType: Joi.string(),
+    position: Joi.string().required(),
     name: Joi.string().required(),
-    note: Joi.string().required(),
-    status: Joi.string().required(),
-    signature: Joi.string().required(),
-    completed: Joi.boolean().required()
+    isDisable: Joi.boolean().required(),
+    showMessages: Joi.boolean().required()
   });
-  return schema.validate(order);
+  return schema.validate(value);
 }
 
 module.exports = {
@@ -30,11 +24,11 @@ module.exports = {
     let status = 200;
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order === null) {
+      let approvalStep = await ApprovalStep.findByPk(req.params.id);
+      if (approvalStep === null) {
         status = 400;
       } else {
-        let affectedRows = await order.destroy();
+        let affectedRows = await approvalStep.destroy();
         result.data = affectedRows;
       }
     } catch (error) {
@@ -53,7 +47,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateApprovalStep(req.body);
 
     if (error) {
       status = 500;
@@ -63,10 +57,10 @@ module.exports = {
     }
 
     try {
-      let order = await Order.create(value, {
+      let approvalStep = await ApprovalStep.create(value, {
         include: []
       });
-      result.data = order;
+      result.data = approvalStep;
     } catch (error) {
       status = 500;
       console.log(error);
@@ -77,23 +71,15 @@ module.exports = {
   },
 
   show: async (req, res) => {
-    let {
-      id
-    } = req.params;
     let result = {};
     let status = 200;
 
     try {
-      let order = await Order.findOne({
-        where: {
-          id
-        },
-        include: [OrderMeta, Request, Message]
-      });
-      if (order == null) {
+      let approvalStep = await ApprovalStep.findByPk(req.params.id);
+      if (approvalStep == null) {
         status = 400;
       } else {
-        result.data = order;
+        result.data = approvalStep;
       }
     } catch (error) {
       console.log(error);
@@ -111,7 +97,7 @@ module.exports = {
     let {
       error,
       value
-    } = validateUser(req.body);
+    } = validateApprovalStep(req.body);
     if (error) {
       status = 500;
       console.log(error);
@@ -120,20 +106,12 @@ module.exports = {
     }
 
     try {
-      let order = await Order.findByPk(req.params.id);
-      if (order == null) {
-        status = 400;
-      } else {
-        order.userId = value.userId;
-        order.costcenterId = value.costcenterId;
-        order.companyId = value.companyId;
-        order.code = value.code;
-        order.name = value.name;
-        order.completed = value.completed;
-        order.note = value.note;
-        order.status = value.status;
-        result.data = await order.save();
-      }
+      let affectedRows = await ApprovalStep.update(value, {
+        where: {
+          id: req.params.id
+        }
+      });
+      result.data = affectedRows;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -145,17 +123,14 @@ module.exports = {
   getAll: async (req, res) => {
     let result = {};
     let status = 200;
-    let {
-      userId
-    } = req.query;
-    // console.log(userId)
+    console.log("sjdkfjksdjfkj")
     try {
-      let orders = await Order.findAll({
-        where: {
-          userId
-        }
+      let approvalSteps = await ApprovalStep.findAll({
+        order: [
+          ["sequence", 'DESC']
+        ]
       });
-      result.data = orders;
+      result.data = approvalSteps;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -168,8 +143,8 @@ module.exports = {
     let status = 200;
 
     try {
-      let orders = await Order.bulkCreate(req.body);
-      result.data = orders;
+      let approvalSteps = await ApprovalStep.bulkCreate(req.body);
+      result.data = approvalSteps;
     } catch (error) {
       console.log(error);
       status = 500;
@@ -180,7 +155,7 @@ module.exports = {
   backup: async (req, res) => {
     let result = {};
     let status = 200;
-    result.data = await data.orders;
+    result.data = await data.approvalSteps;
     return res.status(status).send(result);
   }
 };

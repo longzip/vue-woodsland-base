@@ -19,6 +19,7 @@ function validateRequest(value) {
     position: Joi.string(),
     name: Joi.string(),
     showMessages: Joi.boolean(),
+    isDisable: Joi.boolean().required(),
     completed: Joi.boolean().required()
   });
   return schema.validate(value);
@@ -151,20 +152,22 @@ module.exports = {
               id: value.orderableId
             }
           });
-        else(value.status === "Không")
-        await Order.update({
-          completed: false,
-          status: "Không được duyệt"
-        }, {
-          where: {
-            id: value.orderableId
-          }
-        });
+        else if (value.status === "Không") {
+          await Order.update({
+            completed: false,
+            status: "Không được duyệt"
+          }, {
+            where: {
+              id: value.orderableId
+            }
+          });
 
-        rows.forEach(row => row.update({
-          completed: true,
-          status: "Hủy"
-        }))
+          rows.forEach(row => row.update({
+            completed: true,
+            status: ""
+          }))
+        }
+
       }
     } catch (error) {
       console.log(error);
@@ -177,12 +180,15 @@ module.exports = {
   getAll: async (req, res) => {
     let result = {};
     let status = 200;
-
+    let {
+      userId
+    } = req.query;
     try {
       let requests = await Request.findAll({
-        where: {
-          completed: false
-        }
+        // where: {
+        //   completed: false,
+        //   userId
+        // }
       });
       result.data = requests;
     } catch (error) {
@@ -204,6 +210,7 @@ module.exports = {
       status = 500;
       result.error = error;
     }
+    console.log(result)
     return res.status(status).send(result);
   },
   backup: async (req, res) => {

@@ -123,9 +123,14 @@ module.exports = {
   getAll: async (req, res) => {
     let result = {};
     let status = 200;
-    console.log("sjdkfjksdjfkj")
+    let {
+      approvalableId
+    } = req.query;
     try {
       let approvalSteps = await ApprovalStep.findAll({
+        where: {
+          approvalableId
+        },
         order: [
           ["sequence", 'DESC']
         ]

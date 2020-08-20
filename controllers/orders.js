@@ -6,12 +6,16 @@ const {
   data
 } = require("wms-sequelize");
 const Joi = require("@hapi/joi");
+const {
+  v4: uuidv4
+} = require("uuid");
 
 function validateUser(order) {
   const schema = Joi.object({
     id: Joi.string().required(),
     userId: Joi.string().required(),
     costcenterId: Joi.string().required(),
+    costcenterName: Joi.string().required(),
     approvalId: Joi.string().required(),
     companyId: Joi.string().required(),
     code: Joi.string().required(),
@@ -63,8 +67,15 @@ module.exports = {
     }
 
     try {
-      let order = await Order.create(value, {
-        include: []
+      let order = await Order.create({
+        ...value,
+        OrderMeta: [{
+          id: uuidv4(),
+          metaKey: value.code,
+          metaValue: JSON.stringify([])
+        }]
+      }, {
+        include: [OrderMeta]
       });
       result.data = order;
     } catch (error) {

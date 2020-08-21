@@ -102,11 +102,9 @@ module.exports = {
     }
 
     try {
-      let affectedRows = await OrderMeta.update(value, {
-        where: {
-          id: req.params.id
-        }
-      });
+      let orderMeta = await OrderMeta.findByPk(req.params.id);
+      orderMeta.metaValue = value.metaValue;
+      let affectedRows = await orderMeta.save();
       result.data = affectedRows;
     } catch (error) {
       console.log(error);
